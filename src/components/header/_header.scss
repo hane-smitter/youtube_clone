@@ -1,0 +1,93 @@
+@import "../../variables";
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 1rem 3rem;
+    background-color: $black-primary;
+
+    height: 10vh;
+    width: 100%;
+
+    &__menu {
+        display: none;
+        margin-inline-end: .4rem;
+    }
+
+    &__logo {
+        /* width: 10px;
+        height: 30px; */
+        object-fit: contain;
+        display: block;
+    }
+
+    form {
+        flex: 0.6;
+        display: flex;
+        padding: 0.1rem;
+        border-radius: 3px;
+        border: 1.2px solid;
+        background: $black-secondary;
+
+        button {
+            padding: 0.125rem;
+            color: $text-color;
+            background: transparent;
+            border: none;
+
+            &::focus {
+                border: none;
+            }
+        }
+
+        input {
+            background-color: transparent;
+            width: 100%;
+            font-weight: 500;
+            border: none;
+            padding: 0.1rem;
+            color: $text-color;
+
+            &::focus {
+                outline: none;
+            }
+        }
+    }
+
+    &__icons {
+        display: flex;
+        flex: 0.15;
+        justify-content: space-around;
+        align-items: center;
+
+        img {
+            border-radius: 50%;
+            width: 40px;
+            object-fit: contain;
+            margin-left: 5px;
+        }
+    }
+}
+
+@media (max-width: $breakpoint-small) {
+    .header {
+        padding: 1rem;
+
+        form {
+            flex: 1;
+        }
+
+        &__menu {
+            display: block;
+        }
+
+        &__logo {
+            display: none;
+        }
+
+        &__icons > *:not(img) {
+            display: none;
+        }
+    }
+}
