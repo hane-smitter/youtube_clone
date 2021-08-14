@@ -1,0 +1,65 @@
+@import '../../variables';
+@import '../../mixins';
+
+.video {
+    margin-block-end: 1rem;
+    padding: 0.7rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+
+    &__top {
+        position: relative;
+        margin-block-end: 0.5rem;
+
+        img {
+            width: 100%;
+        }
+
+        span {
+            position: absolute;
+            bottom: .3rem;
+            right: .3rem;
+            padding: .2rem;
+            background-color: #080808ec;
+            border-radius: 3px;
+        }
+    }
+
+    &__title {
+        color: #fff;
+        margin-block-end: .1rem;
+
+        abbr {
+            display: block;
+            text-decoration: none;
+            @include text-ellipsis;
+        }
+    }
+
+    &__details {
+        display: flex;
+        align-items: center;
+
+        span + span {
+            margin-inline-start: .5rem;
+        }
+    }
+
+    &__channel {
+        display: flex;
+        align-items: center;
+        margin-block: .5rem;
+
+        img {
+            display: block;
+            border-radius: 50%;
+            margin-inline-end: .5rem;
+            cursor: pointer;
+        }
+
+        p {
+            margin-block-end: 0;
+        }
+    }
+}

@@ -9,7 +9,7 @@ const Header = ({toggle}) => {
     return (
         <div className="border border-dark header">
             <FaBars className="header__menu" onClick={() => toggle()} />
-            <img src="https://pngimg.com/uploads/youtube/youtube_PNG2.png" className="header__logo" height={20} />
+            <img src="https://pngimg.com/uploads/youtube/youtube_PNG2.png" className="header__logo" alt="logo" height={20} />
             <form>
                 <input type="text" placeholder="search" />
                 <button type="submit">

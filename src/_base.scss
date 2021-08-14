@@ -14,3 +14,13 @@ body {
     color: $text-color;
     font-family: 'Roboto', sans-serif;
 }
+body::-webkit-scrollbar {
+    width: 16px;
+}
+body::-webkit-scrollbar-thumb {
+    height: 56px;
+    border-radius: 8px;
+    border: 4px solid transparent;
+    background-clip: content-box;
+    background: $border-color;
+}

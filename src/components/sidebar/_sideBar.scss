@@ -9,6 +9,10 @@
     padding-block-start: 2rem;
     transition: transform 400ms ease-out;
 
+    &.open {
+        transform: translateX(0);
+    }
+
     ul {
         width: inherit;
         padding-inline: 0;
@@ -38,7 +42,7 @@
     }
 }
 
-@media(max-width: $breakpoint-medium) {
+@media (max-width: $breakpoint-medium) {
     .sidebar {
         width: 90px;
         li {
@@ -51,13 +55,10 @@
     }
 }
 
-@media(max-width: $breakpoint-small) {
+@media (max-width: $breakpoint-small) {
     .sidebar {
         transform: translateX(-100%);
         position: fixed;
         z-index: 999;
-        &.open {
-            transform: translateX(0);
-        }
     }
 }

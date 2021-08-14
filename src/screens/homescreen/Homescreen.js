@@ -3,10 +3,11 @@ import { Container, Row, Col } from "react-bootstrap";
 
 import CategoriesBar from "../../components/categoriesBar/CategoriesBar";
 import Video from "../../components/video/Video";
+import LoginScreen from "../loginScreen/LoginScreen";
 
 const Homescreen = () => {
   return (
-    <Container>
+    /* <Container>
       <CategoriesBar />
       <Row>
         {[...new Array(20)].map(() => (
@@ -15,7 +16,8 @@ const Homescreen = () => {
           </Col>
         ))}
       </Row>
-    </Container>
+    </Container> */
+    <LoginScreen />
   );
 };
 

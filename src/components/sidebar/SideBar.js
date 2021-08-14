@@ -11,10 +11,10 @@ import {
 
 import "./_sideBar.scss";
 
-const SideBar = ({showSidebar}) => {
+const SideBar = ({showSidebar, toggle}) => {
 
     return (
-        <nav className={`sidebar${showSidebar ? ' open' : ''}`}>
+        <nav className={`sidebar${showSidebar ? ' open' : ''}`} onClick={() => toggle(false)}>
             <ul>
                 <li>
                     <MdHome size={23} />

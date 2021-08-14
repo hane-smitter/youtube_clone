@@ -1,0 +1,32 @@
+@import '../../variables';
+
+.login {
+    height: 100vh;
+    width: 100%;
+    display: grid;
+    place-items: center;
+
+    &__container {
+        background-color: $black-secondary;
+        padding: 2rem;
+        margin-inline: 1rem;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        img {
+            object-fit: contain;
+        }
+
+        button {
+            padding: .5rem;
+            border: none;
+            border-radius: 5px;
+            margin-block: .5rem 1rem;
+            &:focus{
+                outline: none;
+            }
+        }
+    }
+}
