@@ -4,7 +4,12 @@ import "./_app.scss";
 import Header from "./components/header/Header";
 import SideBar from "./components/sidebar/SideBar";
 import Homescreen from "./screens/homescreen/Homescreen";
-import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
 import LoginScreen from "./screens/loginScreen/LoginScreen";
 
 const Layout = ({ children }) => {
@@ -25,27 +30,29 @@ const Layout = ({ children }) => {
 const App = () => {
   return (
     <Router>
-      <Switch>
-        <Route exact path="/">
-          <Layout>
-            <Homescreen />
-          </Layout>
-        </Route>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Layout>
+              <Homescreen />
+            </Layout>
+          }
+        />
 
-        <Route path="/auth">
-          <LoginScreen />
-        </Route>
+        <Route path="/auth" element={<LoginScreen />} />
 
-        <Route path="/search">
-          <Layout>
-            <h1>Search results</h1>
-          </Layout>
-        </Route>
+        <Route
+          path="/search"
+          element={
+            <Layout>
+              <h1>Search results</h1>
+            </Layout>
+          }
+        />
 
-        <Route>
-          <Redirect to="/"/>
-        </Route>
-      </Switch>
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </Router>
   );
 };
