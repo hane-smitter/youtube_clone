@@ -2,11 +2,14 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGIN_REQUEST,
-  LOG_OUT,
+  LOGOUT,
   LOAD_PROFILE,
 } from "../constants";
 
-const authReducer = (prevState = {}, action) => {
+export const authReducer = (prevState = {
+  accessToken: sessionStorage.getItem("ytmimic-access-token"),
+  user: JSON.parse(sessionStorage.getItem("ytmimic-user"))
+}, action) => {
   const { type, payload } = action;
   switch (type) {
     case LOGIN_REQUEST:
@@ -27,11 +30,17 @@ const authReducer = (prevState = {}, action) => {
         error: payload,
         accessToken: null,
       };
-      case LOAD_PROFILE:
-            return {
-                ...prevState,
-                user: payload
-            }
+    case LOAD_PROFILE:
+      return {
+        ...prevState,
+        user: payload,
+      };
+    case LOGOUT:
+      return {
+        ...prevState,
+        accessToken: null,
+        user: null,
+      };
     default:
       return prevState;
   }

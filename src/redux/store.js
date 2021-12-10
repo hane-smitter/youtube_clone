@@ -1,14 +1,28 @@
+import { combineReducers } from "redux";
 import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
+import { authReducer } from "./reducers/auth.reducer";
+import { homeVideosReducer } from "./reducers/videos.reducer";
 
 const initState = {
-    name: "Summit",
-    age: 21,
-}
+  /* auth: {
+    user: {
+      name: "Zoom",
+      age: 29,
+    },
+  }, */
+};
 
-const reducer = initState => initState;
+const rootReducer = combineReducers({
+  auth: authReducer,
+  homeVideos: homeVideosReducer,
+});
 
-const store = createStore(reducer, initState, composeWithDevTools(applyMiddleware(thunk)))
+const store = createStore(
+  rootReducer,
+  initState,
+  composeWithDevTools(applyMiddleware(thunk))
+);
 
 export default store;
