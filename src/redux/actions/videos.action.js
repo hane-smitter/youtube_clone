@@ -1,15 +1,22 @@
-import { HOME_VIDEOS_SUCCESS, HOME_VIDEOS_FAIL } from "../constants";
+import {
+  HOME_VIDEOS_SUCCESS,
+  HOME_VIDEOS_FAIL,
+  HOME_VIDEOS_REQUEST,
+} from "../constants";
 import request from "../../api";
 
-export const getPopularVideos = () => async (dispatch) => {
+export const getPopularVideos = (loadState = true) => async (dispatch, getState) => {
   try {
+    loadState && dispatch({
+      type: HOME_VIDEOS_REQUEST,
+    });
     const { data } = await request("/videos", {
       params: {
         part: "snippet,contentDetails,statistics",
         chart: "mostPopular",
         regionCode: "KE",
         maxResults: 20,
-        pageToken: "",
+        pageToken: getState().homeVideos.nextPageToken,
       },
     });
 
@@ -31,15 +38,18 @@ export const getPopularVideos = () => async (dispatch) => {
     });
   }
 };
-export const getVideosByCategory = (keyword) => async (dispatch, getState) => {
+export const getVideosByCategory = (keyword, loadState = true) => async (dispatch, getState) => {
   try {
+    loadState && dispatch({
+      type: HOME_VIDEOS_REQUEST,
+    });
     const { data } = await request("/search", {
       params: {
         part: "snippet",
         maxResults: 20,
         pageToken: getState().homeVideos.nextPageToken,
         q: keyword,
-        type: "video"
+        type: "video",
       },
     });
 
@@ -48,8 +58,8 @@ export const getVideosByCategory = (keyword) => async (dispatch, getState) => {
       payload: {
         videos: data.items,
         nextPageToken: data.nextPageToken,
+        category: keyword,
       },
-      category: "All",
     });
   } catch (err) {
     console.group("YOUTUBE Categories FAILED");

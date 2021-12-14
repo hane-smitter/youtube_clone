@@ -3,9 +3,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 99;
 
     padding: 1rem 3rem;
     background-color: $black-primary;
+
+    position: fixed;
+    top: 0;
 
     height: 10vh;
     width: 100%;

@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { getVideosByCategory } from "../../redux/actions/videos.action";
+import { useDispatch, useSelector } from "react-redux";
+import ScrollContainer from "react-indiana-drag-scroll";
 
+import {
+  getVideosByCategory,
+  getPopularVideos,
+} from "../../redux/actions/videos.action";
 import "./_categoriesBar.scss";
 
 function CategoriesBar() {
   const [activeElement, setActiveElement] = useState("All");
+  const { activeCategory } = useSelector((state) => state.homeVideos);
   const dispatch = useDispatch();
   const keywords = [
     "All",
@@ -26,11 +31,15 @@ function CategoriesBar() {
 
   const handleClick = (value) => {
     setActiveElement(value);
-    dispatch(getVideosByCategory(value));
+    if (value === "All") {
+      dispatch(getPopularVideos());
+    } else {
+      dispatch(getVideosByCategory(value));
+    }
   };
 
   return (
-    <div className="categories-bar">
+    <ScrollContainer className="categories-bar">
       {keywords.map((value, i) => (
         <span
           key={i}
@@ -40,7 +49,7 @@ function CategoriesBar() {
           {value}
         </span>
       ))}
-    </div>
+    </ScrollContainer>
   );
 }
 

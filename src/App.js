@@ -8,6 +8,8 @@ import SideBar from "./components/sidebar/SideBar";
 import Homescreen from "./screens/homescreen/Homescreen";
 import { Navigate, Route, Routes } from "react-router-dom";
 import LoginScreen from "./screens/loginScreen/LoginScreen";
+import WatchScreen from "./screens/watchscreen/WatchScreen";
+import { Container } from "react-bootstrap";
 
 const Layout = ({ children }) => {
   const [showSidebar, toggleSideBar] = useState(false);
@@ -19,7 +21,9 @@ const Layout = ({ children }) => {
       <Header toggle={toggle} />
       <div className="app__container">
         <SideBar showSidebar={showSidebar} toggle={toggle} />
-        {children}
+        <Container fluid className="app__main">
+          {children}
+        </Container>
       </div>
     </>
   );
@@ -52,6 +56,14 @@ const App = () => {
         element={
           <Layout>
             <h1>Search results</h1>
+          </Layout>
+        }
+      />
+      <Route
+        path="/watch/:id"
+        element={
+          <Layout>
+            <WatchScreen />
           </Layout>
         }
       />

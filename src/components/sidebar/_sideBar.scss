@@ -9,6 +9,10 @@
     padding-block-start: 2rem;
     transition: transform 400ms ease-out;
 
+    position: sticky;
+    top: 10vh;
+    left: 0;
+
     &.open {
         transform: translateX(0);
     }
