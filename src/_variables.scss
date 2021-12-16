@@ -6,3 +6,10 @@ $border-color: #4c4c4c;
 
 $breakpoint-medium: 1224px;
 $breakpoint-small: 520px;
+
+@mixin line-clamp($number) {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: $number;
+    -webkit-box-orient: vertical;
+}

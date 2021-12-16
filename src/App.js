@@ -6,6 +6,7 @@ import "./_app.scss";
 import Header from "./components/header/Header";
 import SideBar from "./components/sidebar/SideBar";
 import Homescreen from "./screens/homescreen/Homescreen";
+import SearchScreen from "./screens/searchscreen/SearchScreen";
 import { Navigate, Route, Routes } from "react-router-dom";
 import LoginScreen from "./screens/loginScreen/LoginScreen";
 import WatchScreen from "./screens/watchscreen/WatchScreen";
@@ -52,10 +53,10 @@ const App = () => {
       <Route path="/auth" element={<LoginScreen />} />
 
       <Route
-        path="/search"
+        path="/search/:query"
         element={
           <Layout>
-            <h1>Search results</h1>
+            <SearchScreen/>
           </Layout>
         }
       />

@@ -3,7 +3,14 @@ import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 import { authReducer } from "./reducers/auth.reducer";
-import { homeVideosReducer } from "./reducers/videos.reducer";
+import { channelDetailsReducer } from "./reducers/channel.reducer";
+import { videoCommentsListReducer } from "./reducers/comment.reducer";
+import {
+  homeVideosReducer,
+  relatedVideosReducer,
+  selectedVideoReducer,
+  videosSearchReducer
+} from "./reducers/videos.reducer";
 
 const initState = {
   /* auth: {
@@ -17,6 +24,11 @@ const initState = {
 const rootReducer = combineReducers({
   auth: authReducer,
   homeVideos: homeVideosReducer,
+  selectedVideo: selectedVideoReducer,
+  channelDetails: channelDetailsReducer,
+  commentsList: videoCommentsListReducer,
+  relatedVideos: relatedVideosReducer,
+  searchVideos: videosSearchReducer
 });
 
 const store = createStore(

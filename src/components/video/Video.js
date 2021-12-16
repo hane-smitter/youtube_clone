@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { AiFillEye } from "react-icons/ai";
 import moment from "moment";
 import numeral from "numeral";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import request from "../../api";
-
 import "./_video.scss";
 
 const Video = ({ video }) => {
+  const navigate = useNavigate();
   const [views, setViews] = useState(null);
   const [duration, setDuration] = useState(null);
   const [channelIcon, setChannelIcon] = useState(null);
@@ -27,6 +28,10 @@ const Video = ({ video }) => {
   const seconds = moment.duration(duration);
   const _duration = moment.utc(seconds * 1000).format("mm:ss");
   const _videoId = id?.videoId ?? id;
+
+  const handleVideoClick = () => {
+    navigate(`/watch/${_videoId}`);
+  }
 
   useEffect(() => {
     const get_video_details = async () => {
@@ -59,7 +64,7 @@ const Video = ({ video }) => {
   }, [channelId]);
 
   return (
-    <div className="video">
+    <div className="video" onClick={handleVideoClick}>
       <div className="video__top">
         <LazyLoadImage src={medium.url} alt={title} effect="blur" />
         <span className="video__top__duration">{_duration}</span>
