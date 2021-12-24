@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: get the source code
+      - name: Get the source code
       uses: actions/checkout@v2
 
       - name: install Node
