@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 import "./_app.scss";
 import Header from "./components/header/Header";
 import SideBar from "./components/sidebar/SideBar";
 import Homescreen from "./screens/homescreen/Homescreen";
 import SearchScreen from "./screens/searchscreen/SearchScreen";
-import { Navigate, Route, Routes } from "react-router-dom";
 import LoginScreen from "./screens/loginScreen/LoginScreen";
+import SubscriptionsScreen from "./screens/subscriptionsscreen/SubscriptionsScreen";
 import WatchScreen from "./screens/watchscreen/WatchScreen";
-import { Container } from "react-bootstrap";
+import ChannelScreen from "./screens/channelscreen/ChannelScreen";
 
 const Layout = ({ children }) => {
   const [showSidebar, toggleSideBar] = useState(false);
@@ -56,7 +58,7 @@ const App = () => {
         path="/search/:query"
         element={
           <Layout>
-            <SearchScreen/>
+            <SearchScreen />
           </Layout>
         }
       />
@@ -65,6 +67,22 @@ const App = () => {
         element={
           <Layout>
             <WatchScreen />
+          </Layout>
+        }
+      />
+      <Route
+        path="/feed/subscriptions"
+        element={
+          <Layout>
+            <SubscriptionsScreen />
+          </Layout>
+        }
+      />
+      <Route
+        path="/channel/:channelId"
+        element={
+          <Layout>
+            <ChannelScreen />
           </Layout>
         }
       />

@@ -31,7 +31,7 @@ const Comments = ({ video, videoId }) => {
     <div className="comments">
       <p>{video?.statistics?.commentCount} comments</p>
       <div className="comments__form d-flex w-100 my-2">
-        <img src="/assets/images/avatar1.jpg" className="rounded-circle mr-3" />
+        <img src="/assets/images/avatar1.jpg" className="rounded-circle mr-3" alt="" />
         <form onSubmit={handleSubmitComment} className="d-flex flex-grow-1">
           <input
             type="text"

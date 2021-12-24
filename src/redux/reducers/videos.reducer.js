@@ -11,6 +11,12 @@ import {
   SEARCH_VIDEO_REQUEST,
   SEARCH_VIDEO_FAIL,
   SEARCH_VIDEO_SUCCESS,
+  SUBSCRIBED_CHANNELS_REQUEST,
+  SUBSCRIBED_CHANNELS_SUCCESS,
+  SUBSCRIBED_CHANNELS_FAIL,
+  CHANNEL_PLAYLIST_SUCCESS,
+  CHANNEL_PLAYLIST_FAIL,
+  CHANNEL_PLAYLIST_REQUEST,
 } from "../constants";
 
 export const homeVideosReducer = (
@@ -144,6 +150,73 @@ export const videosSearchReducer = (
         error: payload,
       };
 
+    default:
+      return state;
+  }
+};
+
+export const subscribedChannelsReducer = (
+  state = {
+    loading: false,
+    channels: [],
+    error: null,
+  },
+  action
+) => {
+  const { type, payload } = action;
+  switch (type) {
+    case SUBSCRIBED_CHANNELS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case SUBSCRIBED_CHANNELS_SUCCESS:
+      return {
+        ...state,
+        channels: payload,
+        loading: false,
+        error: null,
+      };
+    case SUBSCRIBED_CHANNELS_FAIL:
+      return {
+        ...state,
+        error: payload,
+        loading: false,
+      };
+    default:
+      return state;
+  }
+};
+
+export const channelPlaylistReducer = (
+  state = {
+    loading: false,
+    playlist: [],
+    error: null,
+  },
+  action
+) => {
+  const { type, payload } = action;
+
+  switch (type) {
+    case CHANNEL_PLAYLIST_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case CHANNEL_PLAYLIST_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        playlist: payload,
+        error: null,
+      };
+    case CHANNEL_PLAYLIST_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: payload,
+      };
     default:
       return state;
   }

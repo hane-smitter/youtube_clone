@@ -21,6 +21,9 @@
             width: 100%;
         }
     }
+    &__desc {
+        @include line-clamp(2);
+    }
     &__duration {
         position: absolute;
 
@@ -79,9 +82,9 @@
                 font-size: 0.9rem;
             }
         }
-        // &__desc {
-        //     display: none;
-        // }
+        &__desc {
+            display: none;
+        }
         &__title {
             font-size: 1rem;
             @include line-clamp(2);

@@ -8,7 +8,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import request from "../../api";
 import "./_video.scss";
 
-const Video = ({ video }) => {
+const Video = ({ video, channelScreen }) => {
   const navigate = useNavigate();
   const [views, setViews] = useState(null);
   const [duration, setDuration] = useState(null);
@@ -23,15 +23,16 @@ const Video = ({ video }) => {
       publishedAt,
       thumbnails: { medium },
     },
+    contentDetails,
   } = video;
 
   const seconds = moment.duration(duration);
   const _duration = moment.utc(seconds * 1000).format("mm:ss");
-  const _videoId = id?.videoId ?? id;
+  const _videoId = id?.videoId || contentDetails?.videoId || id;
 
   const handleVideoClick = () => {
     navigate(`/watch/${_videoId}`);
-  }
+  };
 
   useEffect(() => {
     const get_video_details = async () => {
@@ -78,15 +79,17 @@ const Video = ({ video }) => {
         </span>{" "}
         •<span>{moment(publishedAt).fromNow()}</span>
       </div>
-      <div className="video__channel">
-        <LazyLoadImage
-          src={channelIcon?.url}
-          alt={channelTitle}
-          width="36px"
-          effect="blur"
-        />
-        <p>{channelTitle}</p>
-      </div>
+      {!channelScreen && (
+        <div className="video__channel">
+          <LazyLoadImage
+            src={channelIcon?.url}
+            alt={channelTitle}
+            width="36px"
+            effect="blur"
+          />
+          <p>{channelTitle}</p>
+        </div>
+      )}
     </div>
   );
 };

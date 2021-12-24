@@ -11,6 +11,12 @@ import {
   SEARCH_VIDEO_REQUEST,
   SEARCH_VIDEO_FAIL,
   SEARCH_VIDEO_SUCCESS,
+  SUBSCRIBED_CHANNELS_REQUEST,
+  SUBSCRIBED_CHANNELS_SUCCESS,
+  SUBSCRIBED_CHANNELS_FAIL,
+  CHANNEL_PLAYLIST_FAIL,
+  CHANNEL_PLAYLIST_SUCCESS,
+  CHANNEL_PLAYLIST_REQUEST
 } from "../constants";
 import request from "../../api";
 
@@ -77,7 +83,7 @@ export const getVideosByCategory =
         },
       });
     } catch (err) {
-      console.group("YOUTUBE Categories FAILED");
+      console.group("YOUTUBE Categories FAILED ...frm video.actions");
       console.error(err);
       console.groupEnd();
       dispatch({
@@ -149,13 +155,83 @@ export const getVideosBySearch = (keyword) => async (dispatch) => {
     });
     dispatch({
       type: SEARCH_VIDEO_SUCCESS,
-      payload: data.items
-    })
+      payload: data.items,
+    });
   } catch (err) {
     console.log(err.response.data.message);
     dispatch({
       type: SEARCH_VIDEO_FAIL,
-      payload: err.response.data.message
+      payload: err.response.data.message,
     });
+  }
+};
+
+export const getSubscribedChannels = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: SUBSCRIBED_CHANNELS_REQUEST,
+    });
+    const { data } = await request("/subscriptions", {
+      params: {
+        part: "snippet,contentDetails",
+        mine: true,
+        maxResults: 20,
+      },
+      headers: {
+        Authorization: `Bearer ${getState().auth.accessToken}`,
+      },
+    });
+    console.group("subs ACTIONS");
+    console.log(data);
+    console.groupEnd();
+    dispatch({
+      type: SUBSCRIBED_CHANNELS_SUCCESS,
+      payload: data.items,
+    });
+  } catch (err) {
+    console.log(err.response.data);
+    dispatch({
+      type: SUBSCRIBED_CHANNELS_FAIL,
+      payload: err.response.data.message,
+    });
+  }
+};
+
+export const getPlaylistByChannelId = (id) => async (dispatch) => {
+  try {
+    dispatch({
+      type: CHANNEL_PLAYLIST_REQUEST
+    });
+
+    //1. get upload playlist id
+    const { data: {items} } = await request("/channels", {
+      params: {
+        part: "contentDetails",
+        id
+      }
+    });
+    const uploadPlaylistId = items[0].contentDetails.relatedPlaylists.uploads;
+
+    //2. get the videos using the uploadPlaylistId
+    const {data} = await request("/playlistItems", {
+      params: {
+        part: "contentDetails,snippet",
+        playlistId: uploadPlaylistId,
+        maxResults: 40
+      }
+    });
+
+    dispatch({
+      type: CHANNEL_PLAYLIST_SUCCESS,
+      payload: data.items
+    });
+  } catch (err) {
+    console.group("Actions CHANNEL_PLAYLIST_FAIL")
+    console.log(err?.response?.data);
+    console.groupEnd();
+    dispatch({
+      type: CHANNEL_PLAYLIST_FAIL,
+      payload: err?.response?.data
+    })
   }
 };

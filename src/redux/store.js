@@ -9,7 +9,9 @@ import {
   homeVideosReducer,
   relatedVideosReducer,
   selectedVideoReducer,
-  videosSearchReducer
+  subscribedChannelsReducer,
+  videosSearchReducer,
+  channelPlaylistReducer,
 } from "./reducers/videos.reducer";
 
 const initState = {
@@ -28,7 +30,9 @@ const rootReducer = combineReducers({
   channelDetails: channelDetailsReducer,
   commentsList: videoCommentsListReducer,
   relatedVideos: relatedVideosReducer,
-  searchVideos: videosSearchReducer
+  searchVideos: videosSearchReducer,
+  subscribedChannels: subscribedChannelsReducer,
+  channelPlaylist: channelPlaylistReducer,
 });
 
 const store = createStore(
