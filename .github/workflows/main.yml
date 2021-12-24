@@ -2,8 +2,7 @@ name: Firebase ci/cd integration
 
 on:
   push:
-    branches:
-      - main
+    branches: [ $default-branch ]
 
 jobs:
   deploy:
