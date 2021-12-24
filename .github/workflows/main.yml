@@ -2,10 +2,11 @@ name: Firebase Application
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  build:
+  deploy:
 
   - name: Build & Deployment
   runs-on: ubuntu-latest
