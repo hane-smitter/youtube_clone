@@ -8,7 +8,7 @@ import {
 
 export const authReducer = (prevState = {
   accessToken: sessionStorage.getItem("ytmimic-access-token"),
-  user: JSON.parse(sessionStorage.getItem("ytmimic-user"))
+  user: JSON.parse(sessionStorage.getItem("ytmimic-user")) || {}
 }, action) => {
   const { type, payload } = action;
   switch (type) {

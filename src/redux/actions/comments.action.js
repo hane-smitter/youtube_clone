@@ -5,7 +5,7 @@ import {
   COMMENT_LIST_FAIL,
   CREATE_COMMENT_SUCCESS,
   CREATE_COMMENT_FAIL,
-  CREATE_COMMENT_REQUEST
+  CREATE_COMMENT_REQUEST,
 } from "../constants";
 
 export const getCommentOfVideoById = (id) => async (dispatch) => {
@@ -13,12 +13,17 @@ export const getCommentOfVideoById = (id) => async (dispatch) => {
     dispatch({
       type: COMMENT_LIST_REQUEST,
     });
-    const { data } = await request("/commentThreads", {
+    const { data } = await request("/getCommentOfVideoById", {
+      params: {
+        id,
+      },
+    });
+    /* const { data } = await request("/commentThreads", {
       params: {
         part: "snippet",
         videoId: id,
       },
-    });
+    }); */
     dispatch({
       type: COMMENT_LIST_SUCCESS,
       payload: data.items,
@@ -33,32 +38,27 @@ export const getCommentOfVideoById = (id) => async (dispatch) => {
 };
 
 export const addComment = (id, text) => async (dispatch, getState) => {
-  const body = {
-    snippet: {
-      videoId: id,
-      topLevelComment: {
-        snippet: {
-          textOriginal: text,
-        },
-      },
-    },
-  };
   try {
     dispatch({
       type: CREATE_COMMENT_REQUEST,
     });
-    await request.post("/commentThreads", body, {
+    await request.post("/addComment", {
+      accessToken: getState().auth.accessToken,
+      id,
+      text,
+    });
+    /* await request.post("/commentThreads", body, {
       params: {
         part: "snippet",
       },
       headers: {
         Authorization: `Bearer ${getState().auth.accessToken}`,
       },
-    });
+    }); */
     dispatch({
       type: CREATE_COMMENT_SUCCESS,
     });
-    setTimeout(() => dispatch(getCommentOfVideoById(id)),6000);
+    setTimeout(() => dispatch(getCommentOfVideoById(id)), 6000);
   } catch (err) {
     console.group("Add comment error");
     console.log(err.response.data);

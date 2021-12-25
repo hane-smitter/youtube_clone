@@ -16,7 +16,7 @@ import {
   SUBSCRIBED_CHANNELS_FAIL,
   CHANNEL_PLAYLIST_FAIL,
   CHANNEL_PLAYLIST_SUCCESS,
-  CHANNEL_PLAYLIST_REQUEST
+  CHANNEL_PLAYLIST_REQUEST,
 } from "../constants";
 import request from "../../api";
 
@@ -28,7 +28,13 @@ export const getPopularVideos =
         dispatch({
           type: HOME_VIDEOS_REQUEST,
         });
-      const { data } = await request("/videos", {
+      const { data } = await request("/getPopularVideos", {
+        params: {
+          nextPageToken: getState().homeVideos.nextPageToken,
+          region: "KE",
+        },
+      });
+      /* const { data } = await request("/videos", {
         params: {
           part: "snippet,contentDetails,statistics",
           chart: "mostPopular",
@@ -36,7 +42,7 @@ export const getPopularVideos =
           maxResults: 20,
           pageToken: getState().homeVideos.nextPageToken,
         },
-      });
+      }); */
 
       dispatch({
         type: HOME_VIDEOS_SUCCESS,
@@ -64,13 +70,10 @@ export const getVideosByCategory =
         dispatch({
           type: HOME_VIDEOS_REQUEST,
         });
-      const { data } = await request("/search", {
+      const { data } = await request("/getVideosByCategory", {
         params: {
-          part: "snippet",
-          maxResults: 20,
-          pageToken: getState().homeVideos.nextPageToken,
-          q: keyword,
-          type: "video",
+          nextPageToken: getState().homeVideos.nextPageToken,
+          keyword,
         },
       });
 
@@ -98,8 +101,8 @@ export const getVideoById = (id) => async (dispatch) => {
       type: SELECTED_VIDEO_REQUEST,
     });
 
-    const { data } = await request("/videos", {
-      params: { part: "snippet,statistics", id },
+    const { data } = await request("/getVideoById", {
+      params: { id },
     });
     dispatch({
       type: SELECTED_VIDEO_SUCCESS,
@@ -119,23 +122,29 @@ export const getRelatedVideos = (id) => async (dispatch) => {
       type: RELATED_VIDEOS_REQUEST,
     });
 
-    const { data } = await request("/search", {
+    const { data } = await request("/getRelatedVideos", {
+      params: {
+        id,
+      },
+    });
+
+    /* const { data } = await request("/search", {
       params: {
         part: "snippet",
         relatedVideoId: id,
         maxResults: 15,
         type: "video",
       },
-    });
+    }); */
     dispatch({
       type: RELATED_VIDEOS_SUCCESS,
       payload: data.items,
     });
   } catch (err) {
-    console.log(err.response.data.message);
+    console.log(err?.response?.data?.message);
     dispatch({
       type: RELATED_VIDEOS_FAIL,
-      error: err.response.data.message,
+      error: err?.response?.data?.message,
     });
   }
 };
@@ -145,13 +154,8 @@ export const getVideosBySearch = (keyword) => async (dispatch) => {
     dispatch({
       type: SEARCH_VIDEO_REQUEST,
     });
-    const { data } = await request("/search", {
-      params: {
-        part: "snippet",
-        maxResults: 20,
-        q: keyword,
-        type: "channel,video",
-      },
+    const { data } = await request("/getVideosBySearch", {
+      params: { keyword },
     });
     dispatch({
       type: SEARCH_VIDEO_SUCCESS,
@@ -171,7 +175,12 @@ export const getSubscribedChannels = () => async (dispatch, getState) => {
     dispatch({
       type: SUBSCRIBED_CHANNELS_REQUEST,
     });
-    const { data } = await request("/subscriptions", {
+    const { data } = await request("/getSubscribedChannels", {
+      params: {
+        accessToken: getState().auth.accessToken,
+      },
+    });
+    /* const { data } = await request("/subscriptions", {
       params: {
         part: "snippet,contentDetails",
         mine: true,
@@ -180,10 +189,7 @@ export const getSubscribedChannels = () => async (dispatch, getState) => {
       headers: {
         Authorization: `Bearer ${getState().auth.accessToken}`,
       },
-    });
-    console.group("subs ACTIONS");
-    console.log(data);
-    console.groupEnd();
+    }); */
     dispatch({
       type: SUBSCRIBED_CHANNELS_SUCCESS,
       payload: data.items,
@@ -200,38 +206,45 @@ export const getSubscribedChannels = () => async (dispatch, getState) => {
 export const getPlaylistByChannelId = (id) => async (dispatch) => {
   try {
     dispatch({
-      type: CHANNEL_PLAYLIST_REQUEST
+      type: CHANNEL_PLAYLIST_REQUEST,
     });
 
-    //1. get upload playlist id
-    const { data: {items} } = await request("/channels", {
+    const { data } = await request("/getPlaylistByChannelId", {
+      params: {
+        id,
+      },
+    });
+    /* //1. get upload playlist id
+    const {
+      data: { items },
+    } = await request("/channels", {
       params: {
         part: "contentDetails",
-        id
-      }
+        id,
+      },
     });
     const uploadPlaylistId = items[0].contentDetails.relatedPlaylists.uploads;
 
     //2. get the videos using the uploadPlaylistId
-    const {data} = await request("/playlistItems", {
+    const { data } = await request("/playlistItems", {
       params: {
         part: "contentDetails,snippet",
         playlistId: uploadPlaylistId,
-        maxResults: 40
-      }
-    });
+        maxResults: 40,
+      },
+    }); */
 
     dispatch({
       type: CHANNEL_PLAYLIST_SUCCESS,
-      payload: data.items
+      payload: data.items,
     });
   } catch (err) {
-    console.group("Actions CHANNEL_PLAYLIST_FAIL")
+    console.group("Actions CHANNEL_PLAYLIST_FAIL");
     console.log(err?.response?.data);
     console.groupEnd();
     dispatch({
       type: CHANNEL_PLAYLIST_FAIL,
-      payload: err?.response?.data
-    })
+      payload: err?.response?.data,
+    });
   }
 };

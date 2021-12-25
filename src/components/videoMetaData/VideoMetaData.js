@@ -10,6 +10,7 @@ import {
   checkSubscriptionStatus,
   getChannelDetails,
 } from "../../redux/actions/channel.action";
+import HelmetCustom from "../HelmetCustom";
 
 const VideoMetaData = ({ video, videoId }) => {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const VideoMetaData = ({ video, videoId }) => {
   }, [dispatch, channelId]);
   return (
     <div className="videoMetaData py-2">
+      <HelmetCustom description={video?.snippet?.description} title={video?.snippet?.title} />
       <div className="videoMetaData__top">
         <h5>{video?.snippet?.title}</h5>
         <div className="d-flex justify-content-between align-items-center py-1">

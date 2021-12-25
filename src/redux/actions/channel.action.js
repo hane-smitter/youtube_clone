@@ -11,12 +11,18 @@ export const getChannelDetails = (id) => async (dispatch) => {
     dispatch({
       type: CHANNEL_DETAILS_REQUEST,
     });
-    const { data } = await request("/channels", {
+
+    const { data } = await request("/getChannelDetails", {
+      params: {
+        id,
+      },
+    });
+    /* const { data } = await request("/channels", {
       params: {
         part: "snippet,statistics,contentDetails",
         id,
       },
-    });
+    }); */
     console.group("CHANNEL DETAILS");
     console.log(data);
     console.groupEnd();
@@ -34,7 +40,13 @@ export const getChannelDetails = (id) => async (dispatch) => {
 };
 export const checkSubscriptionStatus = (id) => async (dispatch, getState) => {
   try {
-    const { data } = await request("/subscriptions", {
+    const { data } = await request("/checkSubscriptionStatus", {
+      params: {
+        accessToken: getState().auth.accessToken,
+        id,
+      },
+    });
+    /* const { data } = await request("/subscriptions", {
       params: {
         part: "snippet",
         forChannelId: id,
@@ -42,9 +54,9 @@ export const checkSubscriptionStatus = (id) => async (dispatch, getState) => {
       },
       headers: {
         Authorization: `Bearer ${getState().auth.accessToken}`,
-        Accept: "application/json"
+        Accept: "application/json",
       },
-    });
+    }); */
     dispatch({
       type: SET_SUBSCRIPTION_STATUS,
       payload: data.items.length !== 0,
