@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, batch } from "react-redux";
 import { useParams } from "react-router-dom";
-import numeral from "numeral";
+import millify from "millify";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 import "./_channelScreen.scss";
@@ -17,13 +17,19 @@ const ChannelScreen = () => {
   const { playlist: videos, loading } = useSelector(
     (state) => state.channelPlaylist
   );
+  const subscriptionStatus = useSelector(
+    (state) => state.channelDetails.subscriptionStatus
+  );
   const { snippet, statistics } = useSelector(
     (state) => state.channelDetails.channel
   );
 
   useEffect(() => {
-    dispatch(getPlaylistByChannelId(channelId));
-    dispatch(getChannelDetails(channelId));
+    batch(() => {
+      dispatch(getPlaylistByChannelId(channelId));
+      dispatch(getChannelDetails(channelId));
+      dispatch(checkSubscriptionStatus(channelId));
+    });
   }, [dispatch, channelId]);
   return (
     <>
@@ -34,11 +40,15 @@ const ChannelScreen = () => {
           <div className="ml-3 channelHeader__details">
             <h3>{snippet?.title}</h3>
             <span>
-              {numeral(statistics?.subscriberCount).format("0.a")} subscribers
+              {millify(statistics?.subscriberCount)} subscribers
             </span>
           </div>
         </div>
-        <button>subscribe</button>
+        <button
+          className={`btn border-0 p-2 ${subscriptionStatus && "btn-subscribed"}`}
+        >
+          {subscriptionStatus ? "Subscribed" : "Subscribe"}
+        </button>
       </div>
       <Container>
         <Row>

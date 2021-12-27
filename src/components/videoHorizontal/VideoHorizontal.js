@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import moment from "moment";
-import numeral from "numeral";
+import millify from "millify";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { AiFillEye } from "react-icons/ai";
 
@@ -47,9 +47,9 @@ const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen }) => {
     const get_video_details = async () => {
       const {
         data: { items },
-      } = await request("/videos", {
+      } = await request("/getOneVideoDetails", {
         params: {
-          part: "contentDetails, statistics",
+          // part: "contentDetails, statistics",
           id: _videoId,
         },
       });
@@ -63,9 +63,9 @@ const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen }) => {
     const get_channel_icon = async () => {
       const {
         data: { items },
-      } = await request("/channels", {
+      } = await request("/getOneChannelDetails", {
         params: {
-          part: "snippet",
+          // part: "snippet",
           id: channelId,
         },
       });
@@ -103,8 +103,7 @@ const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen }) => {
         {isVideo && (
           <div className="videoHorizontal__details d-flex align-items-center">
             <AiFillEye />
-            {numeral(views).format("0.a")} views •
-            {moment("2021-03-05").fromNow()}
+            {millify(views)} views •{moment(publishedAt).fromNow()}
           </div>
         )}
         {(searchScreeen || subscriptionsScreen) && (
@@ -112,6 +111,14 @@ const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen }) => {
         )}
         <div className="videoHorizontal__channel d-flex align-items-center my-1">
           {/* we shall include a lazy load image here conditionally */}
+          {(searchScreeen || subscriptionsScreen) && (
+            <LazyLoadImage
+              src={channelIcon}
+              className={"img-rounded"}
+              width={50}
+              effect="blur"
+            />
+          )}
           <p className="mb-0">{channelTitle}</p>
         </div>
         {subscriptionsScreen && (

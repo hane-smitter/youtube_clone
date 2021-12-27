@@ -42,11 +42,19 @@ export const addComment = (id, text) => async (dispatch, getState) => {
     dispatch({
       type: CREATE_COMMENT_REQUEST,
     });
-    await request.post("/addComment", {
-      accessToken: getState().auth.accessToken,
-      id,
-      text,
-    });
+    await request.post(
+      "/addComment",
+      {
+        accessToken: getState().auth.accessToken,
+        id,
+        text,
+      },
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
     /* await request.post("/commentThreads", body, {
       params: {
         part: "snippet",
@@ -60,8 +68,8 @@ export const addComment = (id, text) => async (dispatch, getState) => {
     });
     setTimeout(() => dispatch(getCommentOfVideoById(id)), 6000);
   } catch (err) {
-    console.group("Add comment error");
-    console.log(err.response.data);
+    console.group("Add comment error from axions");
+    console.log(err?.response?.data);
     console.groupEnd();
     dispatch({
       type: CREATE_COMMENT_FAIL,

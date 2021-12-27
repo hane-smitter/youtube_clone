@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiFillEye } from "react-icons/ai";
 import moment from "moment";
-import numeral from "numeral";
+import millify from "millify";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import request from "../../api";
@@ -38,14 +38,14 @@ const Video = ({ video, channelScreen }) => {
     const get_video_details = async () => {
       const {
         data: { items },
-      } = await request("/videos", {
+      } = await request("/getOneVideoDetails", {
         params: {
-          part: "contentDetails, statistics",
+          // parts: "contentDetails, statistics",
           id: _videoId,
         },
       });
-      setViews(items[0].statistics.viewCount);
-      setDuration(items[0].contentDetails.duration);
+      setViews(items[0]?.statistics?.viewCount);
+      setDuration(items[0]?.contentDetails?.duration);
     };
     get_video_details();
   }, [_videoId]);
@@ -53,13 +53,12 @@ const Video = ({ video, channelScreen }) => {
     const get_channel_icon = async () => {
       const {
         data: { items },
-      } = await request("/channels", {
+      } = await request("/getOneChannelDetails", {
         params: {
-          part: "snippet",
           id: channelId,
         },
       });
-      setChannelIcon(items[0].snippet.thumbnails.default);
+      setChannelIcon(items[0]?.snippet?.thumbnails?.default);
     };
     get_channel_icon();
   }, [channelId]);
@@ -75,7 +74,7 @@ const Video = ({ video, channelScreen }) => {
       </div>
       <div className="video__details">
         <span>
-          <AiFillEye /> {numeral(views).format("0.a")} views
+          <AiFillEye /> {millify(views)} views
         </span>{" "}
         •<span>{moment(publishedAt).fromNow()}</span>
       </div>

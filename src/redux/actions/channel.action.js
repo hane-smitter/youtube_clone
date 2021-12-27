@@ -23,9 +23,6 @@ export const getChannelDetails = (id) => async (dispatch) => {
         id,
       },
     }); */
-    console.group("CHANNEL DETAILS");
-    console.log(data);
-    console.groupEnd();
     dispatch({
       type: CHANNEL_DETAILS_SUCCESS,
       payload: data.items[0],

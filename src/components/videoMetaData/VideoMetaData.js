@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import moment from "moment";
-import numeral from "numeral";
+import millify from "millify";
 import { batch, useDispatch, useSelector } from "react-redux";
 import { MdThumbUp, MdThumbDown } from "react-icons/md";
 import ShowMoreText from "react-show-more-text";
@@ -16,6 +16,10 @@ const VideoMetaData = ({ video, videoId }) => {
   const dispatch = useDispatch();
   const channelId = video?.snippet?.channelId;
 
+  function createMarkup() {
+    return { __html: video?.snippet?.description.trim() };
+  }
+
   const { snippet: channelSnippet, statistics: channelStatistics } =
     useSelector((state) => state.channelDetails.channel);
   const subscriptionStatus = useSelector(
@@ -30,18 +34,23 @@ const VideoMetaData = ({ video, videoId }) => {
   }, [dispatch, channelId]);
   return (
     <div className="videoMetaData py-2">
-      <HelmetCustom description={video?.snippet?.description} title={video?.snippet?.title} />
+      <HelmetCustom
+        description={video?.snippet?.description}
+        title={video?.snippet?.title}
+      />
       <div className="videoMetaData__top">
         <h5>{video?.snippet?.title}</h5>
         <div className="d-flex justify-content-between align-items-center py-1">
           <span>
-            {numeral(video?.statistics?.viewCount).format("0.a")} views •
-            {moment(video?.snippet?.publishedAt).fromNow()}
+            {parseInt(video?.statistics?.viewCount) > 100000
+              ? millify(video?.statistics?.viewCount)
+              : video?.statistics?.viewCount}{" "}
+            views •{moment(video?.snippet?.publishedAt).fromNow()}
           </span>
           <div>
             <span>
               <MdThumbUp size={26} />
-              {numeral(video?.statistics?.likeCount).format("0.a")}
+              {millify(video?.statistics?.likeCount)}
             </span>
             <span style={{ marginInlineStart: 10 }}>
               <MdThumbDown size={26} />
@@ -60,13 +69,14 @@ const VideoMetaData = ({ video, videoId }) => {
           <div className="d-flex flex-column">
             <span>{video?.snippet?.channelTitle}</span>
             <span>
-              {numeral(channelStatistics?.subscriberCount).format("0.a")}{" "}
-              Subscribers
+              {millify(channelStatistics?.subscriberCount)} Subscribers
             </span>
           </div>
         </div>
         <button
-          className={`btn border-0 p-2 ${subscriptionStatus && "btn-gray"}`}
+          className={`btn border-0 p-2 ${
+            subscriptionStatus && "btn-subscribed"
+          }`}
         >
           {subscriptionStatus ? "Subscribed" : "Subscribe"}
         </button>
@@ -78,9 +88,8 @@ const VideoMetaData = ({ video, videoId }) => {
           less="SHOW LESS"
           anchorClass="showMoreText"
           expanded={false}
-        >
-          {video?.snippet?.description}
-        </ShowMoreText>
+          dangerouslySetInnerHTML={createMarkup()}
+        ></ShowMoreText>
       </div>
     </div>
   );

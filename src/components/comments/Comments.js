@@ -12,6 +12,7 @@ const Comments = ({ video, videoId }) => {
   const dispatch = useDispatch();
   const [commentTxt, setCommentTxt] = useState("");
   const { comments, loading } = useSelector((state) => state.commentsList);
+  const { photoURL, name } = useSelector((state) => state.auth?.user);
   const _comments = comments?.map(
     (comment) => comment?.snippet?.topLevelComment?.snippet
   );
@@ -31,7 +32,7 @@ const Comments = ({ video, videoId }) => {
     <div className="comments">
       <p>{video?.statistics?.commentCount} comments</p>
       <div className="comments__form d-flex w-100 my-2">
-        <img src="/assets/images/avatar1.jpg" className="rounded-circle mr-3" alt="" />
+        <img src={photoURL} className="rounded-circle mr-3" alt={name} />
         <form onSubmit={handleSubmitComment} className="d-flex flex-grow-1">
           <input
             type="text"

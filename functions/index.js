@@ -1,4 +1,5 @@
 const functions = require("firebase-functions");
+const bodyParser = require("body-parser");
 
 const { request } = require("./api.js");
 
@@ -14,10 +15,14 @@ exports.getPopularVideos = functions.https.onRequest((req, res) => {
   if (!pgToken) {
     pgToken = req.body.nextPageToken;
   }
+  let parts = req.query.parts;
+  if (!parts) {
+    parts = req.body.parts;
+  }
 
   request("/videos", {
     params: {
-      part: "snippet,contentDetails,statistics",
+      part: parts || "snippet,contentDetails,statistics",
       chart: "mostPopular",
       regionCode: region,
       maxResults: 20,
@@ -90,7 +95,7 @@ exports.getVideoById = functions.https.onRequest((req, res) => {
     return;
   }
 
-  let id = req.params.id;
+  let id = req.query.id;
   if (!id) {
     id = req.body.id;
   }
@@ -122,7 +127,7 @@ exports.getRelatedVideos = functions.https.onRequest((req, res) => {
     return;
   }
 
-  let id = req.params.id;
+  let id = req.query.id;
   if (!id) {
     id = req.body.id;
   }
@@ -159,7 +164,7 @@ exports.getVideosBySearch = functions.https.onRequest((req, res) => {
     return;
   }
 
-  let keyword = req.params.keyword;
+  let keyword = req.query.keyword;
   if (!keyword) {
     keyword = req.body.keyword;
   }
@@ -191,12 +196,14 @@ exports.getVideosBySearch = functions.https.onRequest((req, res) => {
 });
 
 exports.getSubscribedChannels = functions.https.onRequest((req, res) => {
+  console.log("req.query");
+  console.log(req.query);
   if (req.method !== "GET") {
     res.sendStatus(405);
     return;
   }
 
-  let accessToken = req.params.accessToken;
+  let accessToken = req.query.accessToken;
   if (!accessToken) {
     accessToken = req.body.accessToken;
   }
@@ -217,12 +224,17 @@ exports.getSubscribedChannels = functions.https.onRequest((req, res) => {
       res.status(200).send(data);
     },
     (error) => {
-      functions.logger.log("Error frm subscribed channel req:", error);
+      console.log("CHECK HERE", error.request._header);
+      console.log("CHECK HERE PPPPPPRSED", JSON.parse(error.request));
+      functions.logger.log(
+        "Error frm subscribed channel req:",
+        error.response.data
+      );
       res.set("Access-Control-Allow-Origin", "*");
       res
         .status((error.response && error.response.status) || 400)
         .send(
-          (error.response && error.response.data.message) ||
+          (error.response && error.response.data.error.message) ||
             "Oops!...Error occured"
         );
     }
@@ -235,7 +247,7 @@ exports.getPlaylistByChannelId = functions.https.onRequest((req, res) => {
     return;
   }
 
-  let id = req.params.id;
+  let id = req.query.id;
   if (!id) {
     id = req.body.id;
   }
@@ -285,6 +297,40 @@ exports.getPlaylistByChannelId = functions.https.onRequest((req, res) => {
     });
 });
 
+exports.getOneVideoDetails = functions.https.onRequest((req, res) => {
+  if (req.method !== "GET") {
+    res.sendStatus(405);
+    return;
+  }
+
+  let id = req.query.id;
+  if (!id) {
+    id = req.body.id;
+  }
+  request("/videos", {
+    params: {
+      part: "contentDetails,statistics",
+      id,
+    },
+  }).then(
+    ({ data }) => {
+      // functions.logger.log("Sending data fetched from API:", data);
+      res.set("Access-Control-Allow-Origin", "*");
+      res.status(200).send(data);
+    },
+    (error) => {
+      functions.logger.log("Error frm request API:", error);
+      res.set("Access-Control-Allow-Origin", "*");
+      res
+        .status((error.response && error.response.status) || 400)
+        .send(
+          (error.response && error.response.error.message) ||
+            "Oops!...Error occured"
+        );
+    }
+  );
+});
+
 // channels
 exports.getChannelDetails = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
@@ -292,14 +338,18 @@ exports.getChannelDetails = functions.https.onRequest((req, res) => {
     return;
   }
 
-  let id = req.params.id;
+  let id = req.query.id;
   if (!id) {
     id = req.body.id;
+  }
+  let parts = req.query.parts;
+  if (!parts) {
+    parts = req.body.parts;
   }
 
   request("/channels", {
     params: {
-      part: "snippet,statistics,contentDetails",
+      part: parts || "snippet,statistics,contentDetails",
       id,
     },
   }).then(
@@ -327,11 +377,11 @@ exports.checkSubscriptionStatus = functions.https.onRequest((req, res) => {
     return;
   }
 
-  let accessToken = req.params.accessToken;
+  let accessToken = req.query.accessToken;
   if (!accessToken) {
     accessToken = req.body.accessToken;
   }
-  let id = req.params.id;
+  let id = req.query.id;
   if (!id) {
     id = req.body.id;
   }
@@ -365,14 +415,49 @@ exports.checkSubscriptionStatus = functions.https.onRequest((req, res) => {
   );
 });
 
-//comments
+exports.getOneChannelDetails = functions.https.onRequest((req, res) => {
+  if (req.method !== "GET") {
+    res.sendStatus(405);
+    return;
+  }
+
+  let { id: channelId } = req.query;
+  if (!channelId) {
+    channelId = req.body.nextPageToken;
+  }
+
+  request("/channels", {
+    params: {
+      part: "snippet",
+      id: channelId,
+    },
+  }).then(
+    ({ data }) => {
+      // functions.logger.log("Sending data fetched from API:", data);
+      res.set("Access-Control-Allow-Origin", "*");
+      res.status(200).send(data);
+    },
+    (error) => {
+      functions.logger.log("Error frm request API:", error);
+      res.set("Access-Control-Allow-Origin", "*");
+      res
+        .status((error.response && error.response.status) || 400)
+        .send(
+          (error.response && error.response.data.message) ||
+            "Oops!...Error occured"
+        );
+    }
+  );
+});
+
+// comments
 exports.getCommentOfVideoById = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
     res.sendStatus(405);
     return;
   }
 
-  let id = req.params.id;
+  let id = req.query.id;
   if (!id) {
     id = req.body.id;
   }
@@ -403,54 +488,62 @@ exports.getCommentOfVideoById = functions.https.onRequest((req, res) => {
 
 exports.addComment = functions.https.onRequest((req, res) => {
   if (req.method !== "POST") {
+    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
-  let { id, text, accessToken } = req.body;
-  if (!id) {
-    id = req.params.id;
-  }
-  if (!text) {
-    text = req.params.text;
-  }
-  if (!accessToken) {
-    accessToken = req.params.accessToken;
-  }
+  const parser = bodyParser.urlencoded({ extended: false });
+  parser(req, res, () => {
+    let reqObj = Object.keys(req.body).join("");
+    reqObj = JSON.parse(reqObj);
 
-  const bodyFormat = {
-    snippet: {
-      videoId: id,
-      topLevelComment: {
-        snippet: {
-          textOriginal: text,
+    let { id, text, accessToken } = reqObj;
+    if (!id) {
+      id = req.query.id;
+    }
+    if (!text) {
+      text = req.query.text;
+    }
+    if (!accessToken) {
+      accessToken = req.query.accessToken;
+    }
+
+    const bodyFormat = {
+      snippet: {
+        videoId: id,
+        topLevelComment: {
+          snippet: {
+            textOriginal: text,
+          },
         },
       },
-    },
-  };
-  request
-    .post("/commentThreads", body, {
-      params: {
-        part: "snippet",
-      },
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-    .then(
-      ({ data }) => {
-        functions.logger.log("posted(create) data to API:", data);
-        res.set("Access-Control-Allow-Origin", "*");
-        res.status(200).send(data);
-      },
-      (error) => {
-        functions.logger.log("Error frm subscribed channel req:", error);
-        res.set("Access-Control-Allow-Origin", "*");
-        res
-          .status((error.response && error.response.status) || 400)
-          .send(
-            (error.response && error.response.data.message) ||
-              "Oops!...Error occured"
+    };
+    request
+      .post("/commentThreads", bodyFormat, {
+        params: {
+          part: "snippet",
+        },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+      .then(
+        ({ data }) => {
+          functions.logger.log("posted(create) data to API:", data);
+          res.set("Access-Control-Allow-Origin", "*");
+          res.status(200).send(data);
+        },
+        (error) => {
+          functions.logger.log(
+            "Error frm subscribed channel req:",
+            error.response.data.error
           );
-      }
-    );
+          res.set("Access-Control-Allow-Origin", "*");
+          res
+            .status((error.response && error.response.status) || 400)
+            .send(
+              error.response.data.error);
+        }
+      );
+  });
 });
