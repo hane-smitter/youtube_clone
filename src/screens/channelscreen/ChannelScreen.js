@@ -7,7 +7,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "./_channelScreen.scss";
 import { getPlaylistByChannelId } from "../../redux/actions/videos.action";
 import Video from "../../components/video/Video";
-import { getChannelDetails } from "../../redux/actions/channel.action";
+import { getChannelDetails, checkSubscriptionStatus } from "../../redux/actions/channel.action";
 import { Col, Container, Row } from "react-bootstrap";
 
 const ChannelScreen = () => {
