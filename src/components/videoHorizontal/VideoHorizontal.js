@@ -103,7 +103,7 @@ const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen }) => {
         {isVideo && (
           <div className="videoHorizontal__details d-flex align-items-center">
             <AiFillEye />
-            {millify(views)} views •{moment(publishedAt).fromNow()}
+            {millify(views ?? 0)} views •{moment(publishedAt).fromNow()}
           </div>
         )}
         {(searchScreeen || subscriptionsScreen) && (

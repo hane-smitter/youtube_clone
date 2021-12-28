@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import ScrollContainer from "react-indiana-drag-scroll";
 
 import {
@@ -10,7 +10,7 @@ import "./_categoriesBar.scss";
 
 function CategoriesBar() {
   const [activeElement, setActiveElement] = useState("All");
-  const { activeCategory } = useSelector((state) => state.homeVideos);
+  // const { activeCategory } = useSelector((state) => state.homeVideos);
   const dispatch = useDispatch();
   const keywords = [
     "All",

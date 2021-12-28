@@ -25,6 +25,6 @@ body::-webkit-scrollbar-thumb {
     background: $border-color;
 }
 .btn-subscribed {
-    background-color: rgb(99, 99, 99);
-    color: #333;
+    background-color: rgb(99, 99, 99)!important;
+    color: #333!important;
 }

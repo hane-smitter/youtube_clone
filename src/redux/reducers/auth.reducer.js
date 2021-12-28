@@ -28,7 +28,6 @@ export const authReducer = (prevState = {
         ...prevState,
         loading: false,
         error: payload,
-        accessToken: null,
       };
     case LOAD_PROFILE:
       return {

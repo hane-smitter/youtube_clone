@@ -196,8 +196,6 @@ exports.getVideosBySearch = functions.https.onRequest((req, res) => {
 });
 
 exports.getSubscribedChannels = functions.https.onRequest((req, res) => {
-  console.log("req.query");
-  console.log(req.query);
   if (req.method !== "GET") {
     res.sendStatus(405);
     return;
@@ -224,8 +222,6 @@ exports.getSubscribedChannels = functions.https.onRequest((req, res) => {
       res.status(200).send(data);
     },
     (error) => {
-      console.log("CHECK HERE", error.request._header);
-      console.log("CHECK HERE PPPPPPRSED", JSON.parse(error.request));
       functions.logger.log(
         "Error frm subscribed channel req:",
         error.response.data

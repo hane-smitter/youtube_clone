@@ -9,24 +9,31 @@ const LoginScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const accessToken = useSelector(state => state.auth.accessToken);
+  const accessToken = useSelector((state) => state.auth.accessToken);
 
   const handleLogin = () => {
     dispatch(login());
-  }
+  };
 
   useEffect(() => {
-    if(accessToken) {
+    if (accessToken) {
       navigate("/", { replace: true });
     }
   }, [accessToken, navigate]);
   return (
     <div className="login">
-        <div className="login__container">
-            <img src="https://pngimg.com/uploads/youtube/youtube_PNG2.png" alt="" width={130} />
-            <button onClick={handleLogin}>Login with Google</button>
-            <p>This project is made using YOUTUBE API</p>
-        </div>
+      <div className="login__container">
+        <img
+          src="https://pngimg.com/uploads/youtube/youtube_PNG2.png"
+          alt=""
+          width={130}
+        />
+        <button onClick={handleLogin}>Login with Google</button>
+        <p>
+          This project mimics the functionality and user interface of{" "}
+          <a href="https://youtube.com" target="_blank" rel="noreferrer">Youtube</a>
+        </p>
+      </div>
     </div>
   );
 };

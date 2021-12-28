@@ -40,7 +40,7 @@ const ChannelScreen = () => {
           <div className="ml-3 channelHeader__details">
             <h3>{snippet?.title}</h3>
             <span>
-              {millify(statistics?.subscriberCount)} subscribers
+              {millify(statistics?.subscriberCount ?? 0)} subscribers
             </span>
           </div>
         </div>
@@ -53,8 +53,8 @@ const ChannelScreen = () => {
       <Container>
         <Row>
           {!loading
-            ? videos?.map((video) => (
-                <Col md={4} lg={3}>
+            ? videos?.map((video, index) => (
+                <Col md={4} lg={3} key={index}>
                   <Video video={video} channelScreen />
                 </Col>
               ))

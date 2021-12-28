@@ -43,18 +43,22 @@ const VideoMetaData = ({ video, videoId }) => {
         <div className="d-flex justify-content-between align-items-center py-1">
           <span>
             {parseInt(video?.statistics?.viewCount) > 100000
-              ? millify(video?.statistics?.viewCount)
+              ? millify(video?.statistics?.viewCount ?? 0)
               : video?.statistics?.viewCount}{" "}
             views •{moment(video?.snippet?.publishedAt).fromNow()}
           </span>
-          <div>
-            <span>
-              <MdThumbUp size={26} />
-              {millify(video?.statistics?.likeCount)}
+          <div className="d-flex align-items-center">
+            <span className="d-flex align-items-center">
+              <MdThumbUp className="me-1" size={26} />
+              {millify(video?.statistics?.likeCount ?? 0)}
             </span>
-            <span style={{ marginInlineStart: 10 }}>
-              <MdThumbDown size={26} />
+            <span
+              className="d-flex ms-2 align-items-center"
+              style={{ textTransform: "uppercase" }}
+            >
+              <MdThumbDown className="me-1" size={26} />
               {/* dislike count was disabled(hidden) as of 2021 */}
+              dislike
             </span>
           </div>
         </div>
@@ -69,7 +73,7 @@ const VideoMetaData = ({ video, videoId }) => {
           <div className="d-flex flex-column">
             <span>{video?.snippet?.channelTitle}</span>
             <span>
-              {millify(channelStatistics?.subscriberCount)} Subscribers
+              {millify(channelStatistics?.subscriberCount ?? 0)} Subscribers
             </span>
           </div>
         </div>

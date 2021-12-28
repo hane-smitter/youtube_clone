@@ -214,6 +214,9 @@ export const getPlaylistByChannelId = (id) => async (dispatch) => {
         id,
       },
     });
+    console.group("CHANNEL PLAYLIST IN ACTIONS")
+    console.log(data);
+    console.groupEnd();
     /* //1. get upload playlist id
     const {
       data: { items },
