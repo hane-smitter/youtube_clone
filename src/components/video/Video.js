@@ -26,8 +26,8 @@ const Video = ({ video, channelScreen }) => {
     contentDetails,
   } = video;
 
-  const seconds = moment.duration(duration);
-  const _duration = moment.utc(seconds * 1000).format("mm:ss");
+  const ms = moment.duration(duration).asMilliseconds();
+  const _duration = moment(ms).format("mm:ss");
   const _videoId = id?.videoId || contentDetails?.videoId || id;
 
   const handleVideoClick = () => {

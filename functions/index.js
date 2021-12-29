@@ -6,6 +6,7 @@ const { request } = require("./api.js");
 //  videos
 exports.getPopularVideos = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -49,6 +50,7 @@ exports.getPopularVideos = functions.https.onRequest((req, res) => {
 
 exports.getVideosByCategory = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -91,6 +93,7 @@ exports.getVideosByCategory = functions.https.onRequest((req, res) => {
 
 exports.getVideoById = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -123,6 +126,7 @@ exports.getVideoById = functions.https.onRequest((req, res) => {
 
 exports.getRelatedVideos = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -160,6 +164,7 @@ exports.getRelatedVideos = functions.https.onRequest((req, res) => {
 
 exports.getVideosBySearch = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -197,6 +202,7 @@ exports.getVideosBySearch = functions.https.onRequest((req, res) => {
 
 exports.getSubscribedChannels = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -239,6 +245,7 @@ exports.getSubscribedChannels = functions.https.onRequest((req, res) => {
 
 exports.getPlaylistByChannelId = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -295,6 +302,7 @@ exports.getPlaylistByChannelId = functions.https.onRequest((req, res) => {
 
 exports.getOneVideoDetails = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -330,6 +338,7 @@ exports.getOneVideoDetails = functions.https.onRequest((req, res) => {
 // channels
 exports.getChannelDetails = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -369,6 +378,7 @@ exports.getChannelDetails = functions.https.onRequest((req, res) => {
 
 exports.checkSubscriptionStatus = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -413,6 +423,7 @@ exports.checkSubscriptionStatus = functions.https.onRequest((req, res) => {
 
 exports.getOneChannelDetails = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -449,6 +460,7 @@ exports.getOneChannelDetails = functions.https.onRequest((req, res) => {
 // comments
 exports.getCommentOfVideoById = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
