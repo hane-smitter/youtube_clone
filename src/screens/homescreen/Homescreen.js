@@ -10,6 +10,7 @@ import {
   getVideosByCategory,
 } from "../../redux/actions/videos.action";
 import SkeletonVideo from "../../components/skeletons/Skeleton";
+import HelmetCustom from "../../components/HelmetCustom";
 
 const Homescreen = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,11 @@ const Homescreen = () => {
   };
 
   return (
-    <Container>
+    <Container> 
+      <HelmetCustom
+        description={"Most popular Videos in the region"}
+        title={"Most popular Charts"}
+      />
       <CategoriesBar />
       <InfiniteScroll
         dataLength={videos.length}

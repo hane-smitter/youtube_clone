@@ -17,6 +17,9 @@ import {
   CHANNEL_PLAYLIST_SUCCESS,
   CHANNEL_PLAYLIST_FAIL,
   CHANNEL_PLAYLIST_REQUEST,
+  MY_LIKED_VIDEOS_SUCCESS,
+  MY_LIKED_VIDEOS_FAIL,
+  MY_LIKED_VIDEOS_REQUEST,
 } from "../constants";
 
 export const homeVideosReducer = (
@@ -216,6 +219,46 @@ export const channelPlaylistReducer = (
         ...state,
         loading: false,
         error: payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export const myLikedVideosReducer = (
+  state = {
+    videos: [],
+    loading: false,
+    nextPageToken: null,
+  },
+  action
+) => {
+  const { type, payload } = action;
+  switch (type) {
+    case MY_LIKED_VIDEOS_SUCCESS:
+      // console.group("REDUCER LIKED VIDS");
+      // console.log("REDUCERS FRM", payload.pageLoad);
+      // console.assert(payload.pageLoad === "primary", "Payload is not primary");
+      // console.groupEnd();
+      return {
+        ...state,
+        videos:
+          payload.pageLoad === "primary"
+            ? payload.items
+            : [...state.videos, ...payload.items],
+        loading: false,
+        nextPageToken: payload.nextPageToken,
+      };
+    case MY_LIKED_VIDEOS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: payload,
+      };
+    case MY_LIKED_VIDEOS_REQUEST:
+      return {
+        ...state,
+        loading: true,
       };
     default:
       return state;

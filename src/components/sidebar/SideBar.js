@@ -39,10 +39,12 @@ const SideBar = ({ showSidebar, toggle }) => {
             <span>Subscriptions</span>
           </li>
         </Link>
-        <li>
-          <MdThumbUp size={23} />
-          <span>Liked Videos</span>
-        </li>
+        <Link to="/feed/liked">
+          <li>
+            <MdThumbUp size={23} />
+            <span>Liked Videos</span>
+          </li>
+        </Link>
         <li>
           <MdHistory size={23} />
           <span>History</span>

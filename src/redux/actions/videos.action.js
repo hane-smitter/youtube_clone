@@ -17,6 +17,9 @@ import {
   CHANNEL_PLAYLIST_FAIL,
   CHANNEL_PLAYLIST_SUCCESS,
   CHANNEL_PLAYLIST_REQUEST,
+  MY_LIKED_VIDEOS_FAIL,
+  MY_LIKED_VIDEOS_REQUEST,
+  MY_LIKED_VIDEOS_SUCCESS,
 } from "../constants";
 import request from "../../api";
 
@@ -214,28 +217,6 @@ export const getPlaylistByChannelId = (id) => async (dispatch) => {
         id,
       },
     });
-    console.group("CHANNEL PLAYLIST IN ACTIONS")
-    console.log(data);
-    console.groupEnd();
-    /* //1. get upload playlist id
-    const {
-      data: { items },
-    } = await request("/channels", {
-      params: {
-        part: "contentDetails",
-        id,
-      },
-    });
-    const uploadPlaylistId = items[0].contentDetails.relatedPlaylists.uploads;
-
-    //2. get the videos using the uploadPlaylistId
-    const { data } = await request("/playlistItems", {
-      params: {
-        part: "contentDetails,snippet",
-        playlistId: uploadPlaylistId,
-        maxResults: 40,
-      },
-    }); */
 
     dispatch({
       type: CHANNEL_PLAYLIST_SUCCESS,
@@ -251,3 +232,42 @@ export const getPlaylistByChannelId = (id) => async (dispatch) => {
     });
   }
 };
+
+export const getMyLikedVideos =
+  (pageLoad = "primary") =>
+  async (dispatch, getState) => {
+    try {
+      pageLoad.toLowerCase() === "primary" &&
+        dispatch({
+          type: MY_LIKED_VIDEOS_REQUEST,
+        });
+
+      const { data } = await request("/getMyLikedVideos", {
+        params: {
+          accessToken: getState().auth.accessToken,
+          pageToken:
+            pageLoad.toLowerCase() !== "primary"
+              ? getState().myLikedVideos.nextPageToken || undefined
+              : undefined,
+        },
+      });
+      data.pageLoad = pageLoad;
+      console.group("LIKED VIDEos");
+      console.log(data);
+      console.groupEnd();
+
+      dispatch({
+        type: MY_LIKED_VIDEOS_SUCCESS,
+        payload: data,
+      });
+    } catch (err) {
+      console.log(
+        (err.response?.data?.error && err.response.data.error.message) ||
+          err.response.statusText ||
+          "eRROR"
+      );
+      dispatch({
+        type: MY_LIKED_VIDEOS_FAIL,
+      });
+    }
+  };

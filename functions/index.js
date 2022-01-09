@@ -335,6 +335,50 @@ exports.getOneVideoDetails = functions.https.onRequest((req, res) => {
   );
 });
 
+exports.getMyLikedVideos = functions.https.onRequest((req, res) => {
+  if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
+    res.sendStatus(405);
+    return;
+  }
+
+  let pageToken = req.query.pageToken;
+  if (!pageToken) {
+    pageToken = req.body.pageToken;
+  }
+  let accessToken = req.query.accessToken;
+  if (!accessToken) {
+    accessToken = req.body.accessToken;
+  }
+  request("/videos", {
+    params: {
+      part: "snippet,contentDetails,statistics",
+      myRating: "like",
+      maxResults: 15,
+      pageToken,
+    },
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  }).then(
+    ({ data }) => {
+      // functions.logger.log("Sending data fetched from API:", data);
+      res.set("Access-Control-Allow-Origin", "*");
+      res.status(200).send(data);
+    },
+    (error) => {
+      functions.logger.log("Error frm request API:", error);
+      res.set("Access-Control-Allow-Origin", "*");
+      res
+        .status((error.response && error.response.status) || 400)
+        .send(
+          (error.response && error.response.data.error.message) ||
+            "Oops!...Error occured"
+        );
+    }
+  );
+});
+
 // channels
 exports.getChannelDetails = functions.https.onRequest((req, res) => {
   if (req.method !== "GET") {
@@ -549,8 +593,7 @@ exports.addComment = functions.https.onRequest((req, res) => {
           res.set("Access-Control-Allow-Origin", "*");
           res
             .status((error.response && error.response.status) || 400)
-            .send(
-              error.response.data.error);
+            .send(error.response.data.error);
         }
       );
   });

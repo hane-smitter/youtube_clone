@@ -9,7 +9,7 @@ import "./_videoHorizontal.scss";
 import request from "../../api";
 import { useNavigate } from "react-router-dom";
 
-const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen }) => {
+const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen, likedVidsScreen }) => {
   const {
     id,
     snippet: {
@@ -29,8 +29,8 @@ const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen }) => {
   const [channelIcon, setChannelIcon] = useState(null);
   const navigate = useNavigate();
 
-  const seconds = moment.duration(duration);
-  const _duration = moment.utc(seconds * 1000).format("mm:ss");
+  const ms = moment.duration(duration).asMilliseconds();
+  const _duration = moment(ms).format("mm:ss");
   const _videoId = id?.videoId ?? id;
   const thumbnail = !isVideo && "videoHorizontal__thumbnail-channel";
   const _channelId = resourceId?.channelId || channelId;
@@ -49,7 +49,6 @@ const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen }) => {
         data: { items },
       } = await request("/getOneVideoDetails", {
         params: {
-          // part: "contentDetails, statistics",
           id: _videoId,
         },
       });
@@ -65,7 +64,6 @@ const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen }) => {
         data: { items },
       } = await request("/getOneChannelDetails", {
         params: {
-          // part: "snippet",
           id: channelId,
         },
       });

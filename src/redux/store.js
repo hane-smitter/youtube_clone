@@ -12,6 +12,7 @@ import {
   subscribedChannelsReducer,
   videosSearchReducer,
   channelPlaylistReducer,
+  myLikedVideosReducer,
 } from "./reducers/videos.reducer";
 
 const initState = {
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
   searchVideos: videosSearchReducer,
   subscribedChannels: subscribedChannelsReducer,
   channelPlaylist: channelPlaylistReducer,
+  myLikedVideos: myLikedVideosReducer,
 });
 
 const store = createStore(

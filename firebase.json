@@ -60,6 +60,10 @@
         "function": "getOneVideoDetails"
       },
       {
+        "source": "/api/getMyLikedVideos",
+        "function": "getMyLikedVideos"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

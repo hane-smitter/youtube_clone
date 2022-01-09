@@ -10,7 +10,7 @@ import "./_header.scss";
 const Header = ({ toggle }) => {
   const [searchTxt, setSearchTxt] = useState("");
   const navigate = useNavigate();
-  const { photoURL, name } = useSelector((state) => state.auth?.user);
+  const { photoURL, name } = useSelector((state) => state?.auth?.user || {});
 
   const handleSearchTxtSubmit = (e) => {
     e.preventDefault();
