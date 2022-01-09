@@ -25,3 +25,4 @@ yarn-error.log*
 .env
 *.bak
 .runtimeconfig.json
+*.log
