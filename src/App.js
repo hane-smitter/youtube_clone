@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect, useLayoutEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Container } from "react-bootstrap";
+import request from "axios";
 
 import "./_app.scss";
 import Header from "./components/header/Header";
@@ -14,6 +15,7 @@ import SubscriptionsScreen from "./screens/subscriptionsscreen/SubscriptionsScre
 import LikedVideosScreen from "./screens/likedvideosscreen/LikedVideosScreen";
 import WatchScreen from "./screens/watchscreen/WatchScreen";
 import ChannelScreen from "./screens/channelscreen/ChannelScreen";
+import { setRegionCode } from "./redux/actions/region.action";
 
 const Layout = ({ children }) => {
   const [showSidebar, toggleSideBar] = useState(false);
@@ -34,8 +36,21 @@ const Layout = ({ children }) => {
 };
 const App = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { accessToken, loading } = useSelector((state) => state.auth);
-  const [ hideView, setHideView ] = useState(true);
+  const [hideView, setHideView] = useState(true);
+
+  useLayoutEffect(() => {
+    async function getCountryCode() {
+      try {
+        const { data } = await request("https://ipwhois.app/json/");
+        dispatch(setRegionCode(data.country_code));
+      } catch (err) {
+        dispatch(setRegionCode(undefined, "error"));
+      }
+    }
+    getCountryCode();
+  }, [dispatch]);
 
   useEffect(() => {
     if (!loading && !accessToken) {
@@ -45,8 +60,8 @@ const App = () => {
   }, [accessToken, loading, navigate]);
 
   if (hideView) {
-    return null
-  };
+    return null;
+  }
 
   return (
     <Routes>

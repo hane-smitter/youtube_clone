@@ -5,6 +5,7 @@ import thunk from "redux-thunk";
 import { authReducer } from "./reducers/auth.reducer";
 import { channelDetailsReducer } from "./reducers/channel.reducer";
 import { videoCommentsListReducer } from "./reducers/comment.reducer";
+import { regionReducer } from "./reducers/region.reducer";
 import {
   homeVideosReducer,
   relatedVideosReducer,
@@ -25,6 +26,7 @@ const initState = {
 };
 
 const rootReducer = combineReducers({
+  region: regionReducer,
   auth: authReducer,
   homeVideos: homeVideosReducer,
   selectedVideo: selectedVideoReducer,

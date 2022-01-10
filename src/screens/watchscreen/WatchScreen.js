@@ -30,7 +30,7 @@ const WatchScreen = () => {
       <Col lg={8}>
         <div className="watchscreen__player">
           <iframe
-            src={`https://www.youtube.com/embed/${id}`}
+            src={`https://www.youtube.com/embed/${id}?rel=0`}
             frameBorder={0}
             title={video?.snippet?.title}
             allowFullScreen

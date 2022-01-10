@@ -10,5 +10,6 @@ module.exports = {
     "quote-props": [2, "consistent"],
     "quotes": ["error", "double"],
     "indent": "off",
+    "new-cap": 0,
   },
 };

@@ -86,7 +86,7 @@ const Video = ({ video, channelScreen }) => {
             width="36px"
             effect="blur"
           />
-          <p>{channelTitle}</p>
+          <p className="ms-2">{channelTitle}</p>
         </div>
       )}
     </div>

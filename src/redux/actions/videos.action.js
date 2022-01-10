@@ -34,7 +34,7 @@ export const getPopularVideos =
       const { data } = await request("/getPopularVideos", {
         params: {
           nextPageToken: getState().homeVideos.nextPageToken,
-          region: "KE",
+          region: getState().region.countryCode
         },
       });
       /* const { data } = await request("/videos", {
@@ -56,12 +56,9 @@ export const getPopularVideos =
         category: "All",
       });
     } catch (err) {
-      console.group("YOUTUBE FAILED");
-      console.error(err);
-      console.groupEnd();
       dispatch({
         type: HOME_VIDEOS_FAIL,
-        payload: err.message,
+        payload: err?.response?.data,
       });
     }
   };
@@ -252,9 +249,6 @@ export const getMyLikedVideos =
         },
       });
       data.pageLoad = pageLoad;
-      console.group("LIKED VIDEos");
-      console.log(data);
-      console.groupEnd();
 
       dispatch({
         type: MY_LIKED_VIDEOS_SUCCESS,
