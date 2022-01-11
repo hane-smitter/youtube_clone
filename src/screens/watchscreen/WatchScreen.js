@@ -11,7 +11,6 @@ import {
   getRelatedVideos,
   getVideoById,
 } from "../../redux/actions/videos.action";
-
 import "./_watchScreen.scss";
 
 const WatchScreen = () => {

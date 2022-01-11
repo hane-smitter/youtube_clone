@@ -12,7 +12,7 @@ const Comments = ({ video, videoId }) => {
   const dispatch = useDispatch();
   const [commentTxt, setCommentTxt] = useState("");
   const { comments, loading } = useSelector((state) => state.commentsList);
-  const { photoURL, name } = useSelector((state) => state.auth?.user);
+  const { photoURL, name } = useSelector((state) => state.auth.user || {});
   const _comments = comments?.map(
     (comment) => comment?.snippet?.topLevelComment?.snippet
   );

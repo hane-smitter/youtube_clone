@@ -15,6 +15,8 @@ const {
   getCommentOfVideoById,
   addComment,
   getMyLikedVideos,
+  likeVideo,
+  getOneVideoRating
 } = require("./fns/index.fns.js");
 
 //  channels
@@ -31,6 +33,8 @@ router.get("/getSubscribedChannels", getSubscribedChannels);
 router.get("/getPlaylistByChannelId", getPlaylistByChannelId);
 router.get("/getOneVideoDetails", getOneVideoDetails);
 router.get("/getMyLikedVideos", getMyLikedVideos);
+router.post("/likeVideo", likeVideo);
+router.get("/getOneVideoRating", getOneVideoRating);
 //  comments
 router.get("/getCommentOfVideoById", getCommentOfVideoById);
 router.get("/addComment", addComment);

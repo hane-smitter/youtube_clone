@@ -1,8 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import millify from "millify";
 import { batch, useDispatch, useSelector } from "react-redux";
-import { MdThumbUp, MdThumbDown } from "react-icons/md";
+import {
+  MdThumbUp,
+  MdThumbDown,
+  MdOutlineThumbUp,
+  MdThumbDownOffAlt as MdOutlineThumbDown,
+} from "react-icons/md";
 import ShowMoreText from "react-show-more-text";
 
 import "./_videoMetaData.scss";
@@ -11,14 +16,41 @@ import {
   getChannelDetails,
 } from "../../redux/actions/channel.action";
 import HelmetCustom from "../HelmetCustom";
+import request from "../../api.js";
 
 const VideoMetaData = ({ video, videoId }) => {
   const dispatch = useDispatch();
+  const { accessToken } = useSelector((state) => state.auth);
   const channelId = video?.snippet?.channelId;
+  const [videoLiked, setVideoLiked] = useState(false);
+  const [videoDisliked, setVideoDisliked] = useState(false);
 
   function createMarkup() {
     return { __html: video?.snippet?.description.trim() };
   }
+
+  const handleLikeVideo = async (rating = "like") => {
+    rating = rating.toLowerCase();
+    if(videoLiked) rating = "none";
+    try {
+      setVideoLiked(rating === "like");
+      await request.post("/likeVideo", { accessToken, id: videoId, rating });
+    } catch (err) {
+      setVideoLiked((prev) => !prev);
+      console.log(err);
+    }
+  };
+  const handleDislikeVideo = async (rating = "dislike") => {
+    rating = rating.toLowerCase();
+    if(videoDisliked) rating = "none";
+    try {
+      setVideoDisliked(rating === "dislike");
+      await request.post("/likeVideo", { accessToken, id: videoId, rating });
+    } catch (err) {
+      setVideoDisliked((prev) => !prev);
+      console.log(err);
+    }
+  };
 
   const { snippet: channelSnippet, statistics: channelStatistics } =
     useSelector((state) => state.channelDetails.channel);
@@ -32,6 +64,28 @@ const VideoMetaData = ({ video, videoId }) => {
       dispatch(checkSubscriptionStatus(channelId));
     });
   }, [dispatch, channelId]);
+  useEffect(() => {
+    async function getVideoRating() {
+      try {
+        const { data } = await request("/getOneVideoRating", {
+          params: {
+            id: videoId,
+            accessToken,
+          },
+        });
+        setVideoLiked(data["items"][0].rating === "like");
+        setVideoDisliked(data["items"][0].rating === "dislike");
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getVideoRating();
+  }, [dispatch, videoId]);
+  console.group("vids like dislike status");
+  console.log(videoLiked);
+  console.log("==============");
+  console.log(videoDisliked);
+  console.groupEnd();
   return (
     <div className="videoMetaData py-2">
       <HelmetCustom
@@ -49,14 +103,39 @@ const VideoMetaData = ({ video, videoId }) => {
           </span>
           <div className="d-flex align-items-center">
             <span className="d-flex align-items-center">
-              <MdThumbUp className="me-1" size={26} />
+              {!videoLiked ? (
+                <MdOutlineThumbUp
+                  className="me-1"
+                  size={26}
+                  onClick={() => handleLikeVideo("like")}
+                />
+              ) : (
+                <MdThumbUp
+                  className="me-1"
+                  size={26}
+                  onClick={() => handleLikeVideo("like")}
+                />
+              )}
+
               {millify(video?.statistics?.likeCount ?? 0)}
             </span>
             <span
               className="d-flex ms-2 align-items-center"
               style={{ textTransform: "uppercase" }}
             >
-              <MdThumbDown className="me-1" size={26} />
+              {!videoDisliked ? (
+                <MdOutlineThumbDown
+                  className="me-1"
+                  size={26}
+                  onClick={() => handleDislikeVideo("dislike")}
+                />
+              ) : (
+                <MdThumbDown
+                  className="me-1"
+                  size={26}
+                  onClick={() => handleDislikeVideo("dislike")}
+                />
+              )}
               {/* dislike count was disabled(hidden) as of 2021 */}
               dislike
             </span>

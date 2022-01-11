@@ -34,7 +34,7 @@ export const getPopularVideos =
       const { data } = await request("/getPopularVideos", {
         params: {
           nextPageToken: getState().homeVideos.nextPageToken,
-          region: getState().region.countryCode
+          region: getState().region.countryCode,
         },
       });
       /* const { data } = await request("/videos", {
@@ -265,3 +265,4 @@ export const getMyLikedVideos =
       });
     }
   };
+

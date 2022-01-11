@@ -1,6 +1,7 @@
 const functions = require("firebase-functions");
 
 const { request } = require("../api.js");
+const { requestApi } = require("../apiPreflight.js");
 
 //  videos
 exports.getPopularVideos = (req, res) => {
@@ -372,6 +373,90 @@ exports.getMyLikedVideos = (req, res) => {
         .status((error.response && error.response.status) || 400)
         .send(
           (error.response && error.response.data.error.message) ||
+            "Oops!...Error occured"
+        );
+    }
+  );
+};
+
+exports.likeVideo = (req, res) => {
+  if (req.method !== "POST") {
+    res.set("Access-Control-Allow-Origin", "*");
+    res.sendStatus(405);
+    return;
+  }
+
+  console.log("_____REQUEST BODY______", req.body);
+  const body = req.body;
+
+  // YouTube video ID & accessToken & rating
+  const { accessToken, id, rating } = body;
+  console.log(body.rating);
+
+  requestApi
+    .post("/videos/rate", {
+      params: {
+        id,
+        rating,
+      },
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .then(
+      (res) => {
+        // functions.logger.log("Sending data fetched from API:", data);
+        res.status(res.status).send(res.data);
+      },
+      (error) => {
+        functions.logger.log("Error frm request API:", error.response.data?.error);
+        res
+          .status((error.response && error.response.status) || 400)
+          .send(
+            (error.response && error.response.data.error.message) ||
+              "Oops!...Error occured"
+          );
+      }
+    );
+};
+
+exports.getOneVideoRating = (req, res) => {
+  if (req.method !== "GET") {
+    res.set("Access-Control-Allow-Origin", "*");
+    res.sendStatus(405);
+    return;
+  }
+
+  let id = req.query.id;
+  if (!id) {
+    id = req.body.id;
+  }
+  let accessToken = req.query.accessToken;
+  if (!accessToken) {
+    accessToken = req.body.accessToken;
+  }
+  console.log(id);
+  console.log(accessToken);
+  request("/videos/getRating", {
+    params: {
+      id,
+    },
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  }).then(
+    ({ data }) => {
+      // functions.logger.log("Sending data fetched from API:", data);
+      res.set("Access-Control-Allow-Origin", "*");
+      res.status(200).send(data);
+    },
+    (error) => {
+      functions.logger.log("Error frm request API:", error?.response);
+      res.set("Access-Control-Allow-Origin", "*");
+      res
+        .status((error.response && error.response.status) || 400)
+        .send(
+          (error.response && error.response.data?.error?.message) ||
             "Oops!...Error occured"
         );
     }
