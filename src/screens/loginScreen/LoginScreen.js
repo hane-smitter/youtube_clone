@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../redux/actions/auth.action";
 
 import "./_loginScreen.scss";
+import HelmetCustom from "../../components/HelmetCustom";
 
 const LoginScreen = () => {
   const navigate = useNavigate();
@@ -22,6 +23,10 @@ const LoginScreen = () => {
   }, [accessToken, navigate]);
   return (
     <div className="login">
+      <HelmetCustom
+        description="Provide credentials to be authenticated"
+        title="Login | Yt-mimic"
+      />
       <div className="login__container">
         <img
           src="https://pngimg.com/uploads/youtube/youtube_PNG2.png"
@@ -31,7 +36,9 @@ const LoginScreen = () => {
         <button onClick={handleLogin}>Login with Google</button>
         <p>
           This project mimics the functionality and user interface of{" "}
-          <a href="https://youtube.com" target="_blank" rel="noreferrer">Youtube</a>
+          <a href="https://youtube.com" target="_blank" rel="noreferrer">
+            Youtube
+          </a>
         </p>
       </div>
     </div>

@@ -2,7 +2,8 @@ import {
   COMMENT_LIST_REQUEST,
   COMMENT_LIST_SUCCESS,
   COMMENT_LIST_FAIL,
-  CREATE_COMMENT_REQUEST
+  CREATE_COMMENT_REQUEST,
+  CREATE_COMMENT_FAIL
 } from "../constants";
 
 export const videoCommentsListReducer = (
@@ -25,6 +26,7 @@ export const videoCommentsListReducer = (
         loading: false,
       };
     case COMMENT_LIST_FAIL:
+      case CREATE_COMMENT_FAIL:
       return {
         ...state,
         loading: false,

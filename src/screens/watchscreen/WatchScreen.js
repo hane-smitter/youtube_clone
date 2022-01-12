@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Row, Col } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Row, Col, Alert } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -16,16 +16,40 @@ import "./_watchScreen.scss";
 const WatchScreen = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const { video, loading } = useSelector((state) => state.selectedVideo);
   const { videos: relatedVideos, loading: relatedVideosLoading } = useSelector(
     (state) => state.relatedVideos
   );
+  useEffect(() => {
+    let timeoutID;
+    if (showAlert) {
+      if (typeof timeoutID === "number") {
+        clearTimeout(timeoutID);
+      }
+      timeoutID = setTimeout(() => setShowAlert(false), 5000);
+    }
+    return () => clearTimeout(timeoutID);
+  }, [showAlert]);
+
   useEffect(() => {
     dispatch(getVideoById(id));
     dispatch(getRelatedVideos(id));
   }, [dispatch, id]);
   return (
     <Row>
+      <div className="alert-box">
+        {showAlert && (
+          <Alert
+            variant="warning"
+            onClose={() => setShowAlert(false)}
+            dismissible
+          >
+            {alertMessage}
+          </Alert>
+        )}
+      </div>
       <Col lg={8}>
         <div className="watchscreen__player">
           <iframe
@@ -39,7 +63,12 @@ const WatchScreen = () => {
         </div>
         {!loading ? (
           <>
-            <VideoMetaData video={video} videoId={id} />
+            <VideoMetaData
+              video={video}
+              videoId={id}
+              setShowAlert={setShowAlert}
+              setAlertMessage={setAlertMessage}
+            />
             <Comments video={video} videoId={id} />
           </>
         ) : (
@@ -54,7 +83,7 @@ const WatchScreen = () => {
               return (
                 <VideoHorizontal
                   video={relatedVideo}
-                  key={`${video.id.videoId + "" + index}`}
+                  key={`${video?.id.videoId + "" + index}`}
                 />
               );
             })

@@ -37,7 +37,7 @@ const ChannelScreen = () => {
         <div className="d-flex align-items-center channelHeader__left">
           <img src={snippet?.thumbnails?.default?.url} alt="" />
 
-          <div className="ml-3 channelHeader__details">
+          <div className="ms-3 channelHeader__details">
             <h3>{snippet?.title}</h3>
             <span>
               {millify(statistics?.subscriberCount ?? 0)} subscribers

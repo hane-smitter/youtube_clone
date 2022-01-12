@@ -54,4 +54,4 @@ const Comments = ({ video, videoId }) => {
   );
 };
 
-export default Comments;
+export default React.memo(Comments);

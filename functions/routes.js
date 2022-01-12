@@ -16,7 +16,7 @@ const {
   addComment,
   getMyLikedVideos,
   likeVideo,
-  getOneVideoRating
+  getOneVideoRating,
 } = require("./fns/index.fns.js");
 
 //  channels

@@ -6,7 +6,7 @@ import {
   MdThumbUp,
   MdThumbDown,
   MdOutlineThumbUp,
-  MdThumbDownOffAlt as MdOutlineThumbDown,
+  MdOutlineThumbDown,
 } from "react-icons/md";
 import ShowMoreText from "react-show-more-text";
 
@@ -18,12 +18,13 @@ import {
 import HelmetCustom from "../HelmetCustom";
 import request from "../../api.js";
 
-const VideoMetaData = ({ video, videoId }) => {
+const VideoMetaData = ({ video, videoId, setAlertMessage, setShowAlert }) => {
   const dispatch = useDispatch();
   const { accessToken } = useSelector((state) => state.auth);
   const channelId = video?.snippet?.channelId;
   const [videoLiked, setVideoLiked] = useState(false);
   const [videoDisliked, setVideoDisliked] = useState(false);
+  const [initRating, setInitRating] = useState({});
 
   function createMarkup() {
     return { __html: video?.snippet?.description.trim() };
@@ -31,23 +32,40 @@ const VideoMetaData = ({ video, videoId }) => {
 
   const handleLikeVideo = async (rating = "like") => {
     rating = rating.toLowerCase();
-    if(videoLiked) rating = "none";
+    if (videoLiked) rating = "none";
     try {
       setVideoLiked(rating === "like");
+      setVideoDisliked(false);
       await request.post("/likeVideo", { accessToken, id: videoId, rating });
     } catch (err) {
       setVideoLiked((prev) => !prev);
+      setVideoDisliked(Boolean(initRating?.disliked));
+      setShowAlert(true);
+      setAlertMessage(
+        err?.response.status === 401
+          ? "You need to have a youtube channel linked with your google account, to LIKE this video"
+          : "Could not LIKE video. Try again later!"
+      );
       console.log(err);
     }
   };
   const handleDislikeVideo = async (rating = "dislike") => {
     rating = rating.toLowerCase();
-    if(videoDisliked) rating = "none";
+    if (videoDisliked) rating = "none";
     try {
       setVideoDisliked(rating === "dislike");
+      setVideoLiked(false);
+
       await request.post("/likeVideo", { accessToken, id: videoId, rating });
     } catch (err) {
       setVideoDisliked((prev) => !prev);
+      setVideoLiked(Boolean(initRating?.liked));
+      setShowAlert(true);
+      setAlertMessage(
+        err?.response.status === 401
+          ? "You need to have a youtube channel linked with your google account, to DISLIKE this video"
+          : "Could not DISLIKE video. Try again later!"
+      );
       console.log(err);
     }
   };
@@ -73,18 +91,24 @@ const VideoMetaData = ({ video, videoId }) => {
             accessToken,
           },
         });
-        setVideoLiked(data["items"][0].rating === "like");
-        setVideoDisliked(data["items"][0].rating === "dislike");
+        const liked = data["items"][0].rating === "like";
+        const disliked = data["items"][0].rating === "dislike";
+        setVideoLiked(liked);
+        setVideoDisliked(disliked);
+        setInitRating({
+          liked,
+          disliked,
+        });
       } catch (err) {
         console.log(err);
       }
     }
     getVideoRating();
-  }, [dispatch, videoId]);
+  }, [dispatch, videoId, accessToken]);
   console.group("vids like dislike status");
-  console.log(videoLiked);
+  console.log("liked: ", videoLiked);
   console.log("==============");
-  console.log(videoDisliked);
+  console.log("disliked: ", videoDisliked);
   console.groupEnd();
   return (
     <div className="videoMetaData py-2">
@@ -178,4 +202,4 @@ const VideoMetaData = ({ video, videoId }) => {
   );
 };
 
-export default VideoMetaData;
+export default React.memo(VideoMetaData);

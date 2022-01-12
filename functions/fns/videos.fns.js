@@ -409,7 +409,10 @@ exports.likeVideo = (req, res) => {
         res.status(res.status).send(res.data);
       },
       (error) => {
-        functions.logger.log("Error frm request API:", error.response.data?.error);
+        functions.logger.log(
+          "Error frm request API:",
+          error.response.data?.error
+        );
         res
           .status((error.response && error.response.status) || 400)
           .send(

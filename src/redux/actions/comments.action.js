@@ -42,27 +42,16 @@ export const addComment = (id, text) => async (dispatch, getState) => {
     dispatch({
       type: CREATE_COMMENT_REQUEST,
     });
-    await request.post(
-      "/addComment",
-      {
-        accessToken: getState().auth.accessToken,
-        id,
-        text,
-      },
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
-    );
-    /* await request.post("/commentThreads", body, {
+    await request.get("/addComment", {
       params: {
-        part: "snippet",
+        text,
+        id,
+        accessToken: getState().auth.accessToken,
       },
       headers: {
-        Authorization: `Bearer ${getState().auth.accessToken}`,
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-    }); */
+    });
     dispatch({
       type: CREATE_COMMENT_SUCCESS,
     });
@@ -73,6 +62,7 @@ export const addComment = (id, text) => async (dispatch, getState) => {
     console.groupEnd();
     dispatch({
       type: CREATE_COMMENT_FAIL,
+      payload: "Could not add Comment",
     });
   }
 };

@@ -40,8 +40,7 @@ exports.getCommentOfVideoById = (req, res) => {
 };
 
 exports.addComment = (req, res) => {
-  if (req.method !== "POST") {
-    res.set("Access-Control-Allow-Origin", "*");
+  if (req.method !== "GET") {
     res.sendStatus(405);
     return;
   }
@@ -100,9 +99,9 @@ exports.addComment = (req, res) => {
   //       );
   //   });
 
-  const reqObj = req.body;
+  
 
-  let { id, text, accessToken } = reqObj;
+  let { id, text, accessToken } = req.query;
   if (!id) {
     id = req.query.id;
   }

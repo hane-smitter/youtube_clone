@@ -10,6 +10,10 @@
       {
         "source": "/api/**",
         "function": "fns"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
       }
     ]
   },
