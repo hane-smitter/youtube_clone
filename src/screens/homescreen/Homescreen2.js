@@ -31,17 +31,7 @@ const HomescreenTwo = () => {
     };
   }, [dispatch]);
 
-  useEffect(() => {
-    let timeoutID;
-    timeoutID = setTimeout(() => setshowSignInModal(true), 10000);
-    // if (showSignInModal) {
-    //   if (typeof timeoutID === "number") {
-    //     clearTimeout(timeoutID);
-    //   }
-    //   timeoutID = setTimeout(() => setshowSignInModal(true), 5000);
-    // }
-    return () => clearTimeout(timeoutID);
-  }, []);
+
 
   const fetchMoreData = () => {
     const controller = new AbortController();
