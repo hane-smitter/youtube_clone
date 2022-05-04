@@ -13,7 +13,7 @@ import store from "./redux/store";
 const ResolveScroll = ({ children }) => {
   const location = useLocation();
   React.useLayoutEffect(() => {
-    document.documentElement.scrollTo(0, 0);
+    document.documentElement.scroll(0, 0);
   }, [location.pathname]);
   return children;
 };

@@ -1,13 +1,9 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Navigate, Route, Routes } from "react-router-dom";
-import { Container } from "react-bootstrap";
+import React, { useLayoutEffect } from "react";
+import { useDispatch } from "react-redux";
+// import { useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import request from "axios";
 
-import "./_app.scss";
-import Header from "./components/header/Header";
-import SideBar from "./components/sidebar/SideBar";
 import Homescreen from "./screens/homescreen/Homescreen";
 import SearchScreen from "./screens/searchscreen/SearchScreen";
 import LoginScreen from "./screens/loginScreen/LoginScreen";
@@ -16,30 +12,16 @@ import LikedVideosScreen from "./screens/likedvideosscreen/LikedVideosScreen";
 import WatchScreen from "./screens/watchscreen/WatchScreen";
 import ChannelScreen from "./screens/channelscreen/ChannelScreen";
 import { setRegionCode } from "./redux/actions/region.action";
+import HomescreenTwo from "./screens/homescreen/Homescreen2";
+import NotFound from "./screens/NotFound/NotFound";
+import Layout from "./components/layout/Layout";
+import PrivateGuard from "./components/Guard/AuthGuardPrivate";
+import PublicGuard from "./components/Guard/AuthGuardPublic";
+import LayoutV2 from "./components/layout/Layout2";
 
-const Layout = ({ children }) => {
-  const [showSidebar, toggleSideBar] = useState(false);
-
-  const toggle = () => toggleSideBar((_) => !_);
-
-  return (
-    <>
-      <Header toggle={toggle} />
-      <div className="app__container">
-        <SideBar showSidebar={showSidebar} toggle={toggle} />
-        <Container fluid className="app__main">
-          {children}
-        </Container>
-      </div>
-    </>
-  );
-};
 const App = () => {
-  const navigate = useNavigate();
+  // const abortControllerRef = React.useRef(new AbortController());
   const dispatch = useDispatch();
-  const { accessToken, loading } = useSelector((state) => state.auth);
-  const [hideView, setHideView] = useState(true);
-
   useLayoutEffect(() => {
     async function getCountryCode() {
       try {
@@ -52,72 +34,48 @@ const App = () => {
     getCountryCode();
   }, [dispatch]);
 
-  useEffect(() => {
-    if (!loading && !accessToken) {
-      navigate("/auth", { replace: true });
-    }
-    setHideView(false);
-  }, [accessToken, loading, navigate]);
-
-  if (hideView) {
-    return null;
-  }
-
   return (
     <Routes>
-      <Route
-        path="/"
-        element={
-          <Layout>
-            <Homescreen />
-          </Layout>
-        }
-      />
+      <Route path="/" element={<LayoutV2 />}>
+        <Route
+          index
+          exact
+          element={
+            <PublicGuard>
+              <HomescreenTwo />
+            </PublicGuard>
+          }
+        />
+        <Route path="search/:query" element={<SearchScreen />} />
+        <Route path="watch/:id" element={<WatchScreen />} />
+        <Route
+          path="/auth"
+          element={
+            <PublicGuard>
+              <LoginScreen />
+            </PublicGuard>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
+      </Route>
 
-      <Route path="/auth" element={<LoginScreen />} />
+      <Route
+        path="/a"
+        element={
+          <PrivateGuard>
+            <Layout />
+          </PrivateGuard>
+        }
+      >
+        <Route index exact element={<Homescreen />} />
+        <Route path="search/:query" element={<SearchScreen />} />
+        <Route path="watch/:id" element={<WatchScreen />} />
+        <Route path="feed/subscriptions" element={<SubscriptionsScreen />} />
+        <Route path="channel/:channelId" element={<ChannelScreen />} />
+        <Route path="feed/liked" element={<LikedVideosScreen />} />
 
-      <Route
-        path="/search/:query"
-        element={
-          <Layout>
-            <SearchScreen />
-          </Layout>
-        }
-      />
-      <Route
-        path="/watch/:id"
-        element={
-          <Layout>
-            <WatchScreen />
-          </Layout>
-        }
-      />
-      <Route
-        path="/feed/subscriptions"
-        element={
-          <Layout>
-            <SubscriptionsScreen />
-          </Layout>
-        }
-      />
-      <Route
-        path="/channel/:channelId"
-        element={
-          <Layout>
-            <ChannelScreen />
-          </Layout>
-        }
-      />
-      <Route
-        path="/feed/liked"
-        element={
-          <Layout>
-            <LikedVideosScreen />
-          </Layout>
-        }
-      />
-
-      <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
     </Routes>
   );
 };

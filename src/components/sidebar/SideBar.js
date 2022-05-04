@@ -2,7 +2,7 @@ import React from "react";
 import {
   MdSubscriptions,
   MdThumbUp,
-  MdExitToApp,
+  MdLogout,
   MdHistory,
   MdLibraryBooks,
   MdHome,
@@ -27,39 +27,39 @@ const SideBar = ({ showSidebar, toggle }) => {
       onClick={() => toggle(false)}
     >
       <ul>
-        <Link to="/">
+        <Link to="/a">
           <li>
-            <MdHome size={23} />
+            <MdHome size={23} data-tip="Home" />
             <span>Home</span>
           </li>
         </Link>
-        <Link to="/feed/subscriptions">
+        <Link to="feed/subscriptions">
           <li>
-            <MdSubscriptions size={23} />
+            <MdSubscriptions size={23} data-tip="Subscriptions" />
             <span>Subscriptions</span>
           </li>
         </Link>
-        <Link to="/feed/liked">
+        <Link to="feed/liked">
           <li>
-            <MdThumbUp size={23} />
+            <MdThumbUp size={23} data-tip="Liked Videos" />
             <span>Liked Videos</span>
           </li>
         </Link>
         <li>
-          <MdHistory size={23} />
+          <MdHistory size={23} data-tip="History" />
           <span>History</span>
         </li>
         <li>
-          <MdLibraryBooks size={23} />
+          <MdLibraryBooks size={23} data-tip="Library" />
           <span>Library</span>
         </li>
         <li>
-          <MdSentimentDissatisfied />
+          <MdSentimentDissatisfied data-tip="..." />
           <span>I don't know</span>
         </li>
         <hr />
         <li onClick={logoutHandler}>
-          <MdExitToApp />
+          <MdLogout size={23} data-tip="Log out" />
           <span>Log out</span>
         </li>
         <hr />

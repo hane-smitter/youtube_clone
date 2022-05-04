@@ -37,9 +37,9 @@ const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen, likedVidsS
 
   const handleRelatedVideoClick = () => {
     if (isVideo) {
-      navigate(`/watch/${_videoId}`);
+      navigate(`/a/watch/${_videoId}`);
     } else {
-      navigate(`/channel/${_channelId}`);
+      navigate(`/a/channel/${_channelId}`);
     }
   };
 

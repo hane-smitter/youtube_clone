@@ -6,36 +6,39 @@ import {
 } from "../constants";
 import request from "../../api";
 
-export const getChannelDetails = (id) => async (dispatch) => {
-  try {
-    dispatch({
-      type: CHANNEL_DETAILS_REQUEST,
-    });
+export const getChannelDetails =
+  (id, config = {}) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: CHANNEL_DETAILS_REQUEST,
+      });
 
-    const { data } = await request("/getChannelDetails", {
-      params: {
-        id,
-      },
-    });
-    /* const { data } = await request("/channels", {
+      const { data } = await request("/getChannelDetails", {
+        ...config,
+        params: {
+          id,
+        },
+      });
+      /* const { data } = await request("/channels", {
       params: {
         part: "snippet,statistics,contentDetails",
         id,
       },
     }); */
-    dispatch({
-      type: CHANNEL_DETAILS_SUCCESS,
-      payload: data.items[0],
-    });
-  } catch (err) {
-    console.log(err);
-    dispatch({
-      type: CHANNEL_DETAILS_FAIL,
-      payload: err.response.data,
-    });
-  }
-};
-export const checkSubscriptionStatus = (id) => async (dispatch, getState) => {
+      dispatch({
+        type: CHANNEL_DETAILS_SUCCESS,
+        payload: data.items[0],
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: CHANNEL_DETAILS_FAIL,
+        payload: err.response.data,
+      });
+    }
+  };
+export const checkSubscriptionStatus = (id, config = {}) => async (dispatch, getState) => {
   try {
     const { data } = await request("/checkSubscriptionStatus", {
       params: {

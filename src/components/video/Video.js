@@ -31,7 +31,7 @@ const Video = ({ video, channelScreen }) => {
   const _videoId = id?.videoId || contentDetails?.videoId || id;
 
   const handleVideoClick = () => {
-    navigate(`/watch/${_videoId}`);
+    navigate(`watch/${_videoId}`);
   };
 
   useEffect(() => {

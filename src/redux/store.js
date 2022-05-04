@@ -17,12 +17,7 @@ import {
 } from "./reducers/videos.reducer";
 
 const initState = {
-  /* auth: {
-    user: {
-      name: "Zoom",
-      age: 29,
-    },
-  }, */
+  // abortSignal: new AbortController()
 };
 
 const rootReducer = combineReducers({

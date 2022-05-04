@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import millify from "millify";
 import { batch, useDispatch, useSelector } from "react-redux";
@@ -18,53 +18,80 @@ import {
 import HelmetCustom from "../HelmetCustom";
 import request from "../../api.js";
 
-const VideoMetaData = ({ video, videoId, setAlertMessage, setShowAlert }) => {
+const VideoReactionFeedback = {
+  success: "Reaction recorded:)",
+  auth_warning: "You need to login to react to this video",
+  info: "You need to have a youtube channel linked with your google account, to react to this video",
+  error: "Could not react to the video. Try again later!",
+};
+
+const VideoMetaData = ({
+  video,
+  videoId,
+  setAlertMessage,
+  setShowAlert,
+  activateMoreFeatures,
+}) => {
   const dispatch = useDispatch();
   const { accessToken } = useSelector((state) => state.auth);
   const channelId = video?.snippet?.channelId;
   const [videoLiked, setVideoLiked] = useState(false);
   const [videoDisliked, setVideoDisliked] = useState(false);
-  const [initRating, setInitRating] = useState({});
+  const initRating = useRef({});
+  const [, setInitRating] = useState({});
 
   function createMarkup() {
     return { __html: video?.snippet?.description.trim() };
   }
 
   const handleLikeVideo = async (rating = "like") => {
+    if (!activateMoreFeatures) {
+      setShowAlert(true);
+      setAlertMessage(VideoReactionFeedback.auth_warning);
+      return;
+    }
     rating = rating.toLowerCase();
     if (videoLiked) rating = "none";
     try {
       setVideoLiked(rating === "like");
-      setVideoDisliked(false);
+      rating !== "none" && setVideoDisliked(!rating === "like");
       await request.post("/likeVideo", { accessToken, id: videoId, rating });
+      setInitRating({ ...initRating, liked: rating === "like" });
     } catch (err) {
       setVideoLiked((prev) => !prev);
-      setVideoDisliked(Boolean(initRating?.disliked));
+      setVideoDisliked(Boolean(initRating.current?.disliked));
       setShowAlert(true);
       setAlertMessage(
         err?.response.status === 401
-          ? "You need to have a youtube channel linked with your google account, to LIKE this video"
-          : "Could not LIKE video. Try again later!"
+          ? VideoReactionFeedback.info
+          : VideoReactionFeedback.error
       );
       console.log(err);
     }
   };
   const handleDislikeVideo = async (rating = "dislike") => {
+    if (!activateMoreFeatures) {
+      setShowAlert(true);
+      setAlertMessage(VideoReactionFeedback.auth_warning);
+      return;
+    }
     rating = rating.toLowerCase();
     if (videoDisliked) rating = "none";
     try {
       setVideoDisliked(rating === "dislike");
-      setVideoLiked(false);
+      rating !== "none" && setVideoLiked(!rating === "dislike");
 
       await request.post("/likeVideo", { accessToken, id: videoId, rating });
+      setInitRating({ ...initRating, disliked: rating === "dislike" });
     } catch (err) {
-      setVideoDisliked((prev) => !prev);
-      setVideoLiked(Boolean(initRating?.liked));
+      console.log("initial rating", initRating.current);
+      setVideoDisliked(Boolean(initRating.current?.disliked));
+      setVideoLiked(Boolean(initRating.current?.liked));
       setShowAlert(true);
       setAlertMessage(
         err?.response.status === 401
-          ? "You need to have a youtube channel linked with your google account, to DISLIKE this video"
-          : "Could not DISLIKE video. Try again later!"
+          ? VideoReactionFeedback.info
+          : VideoReactionFeedback.error
       );
       console.log(err);
     }
@@ -79,8 +106,10 @@ const VideoMetaData = ({ video, videoId, setAlertMessage, setShowAlert }) => {
   useEffect(() => {
     batch(() => {
       dispatch(getChannelDetails(channelId));
-      dispatch(checkSubscriptionStatus(channelId));
+      activateMoreFeatures && dispatch(checkSubscriptionStatus(channelId));
     });
+
+    // eslint-disable-next-line
   }, [dispatch, channelId]);
   useEffect(() => {
     async function getVideoRating() {
@@ -100,16 +129,22 @@ const VideoMetaData = ({ video, videoId, setAlertMessage, setShowAlert }) => {
           disliked,
         });
       } catch (err) {
+        setInitRating({
+          liked: null,
+          disliked: null,
+        });
         console.log(err);
       }
     }
-    getVideoRating();
+    activateMoreFeatures && getVideoRating();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, videoId, accessToken]);
-  console.group("vids like dislike status");
-  console.log("liked: ", videoLiked);
-  console.log("==============");
-  console.log("disliked: ", videoDisliked);
-  console.groupEnd();
+  // console.group("vids like dislike status");
+  // console.log("liked: ", videoLiked);
+  // console.log("==============");
+  // console.log("disliked: ", videoDisliked);
+  // console.groupEnd();
   return (
     <div className="videoMetaData py-2">
       <HelmetCustom

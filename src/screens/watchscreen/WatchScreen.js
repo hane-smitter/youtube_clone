@@ -16,6 +16,8 @@ import "./_watchScreen.scss";
 const WatchScreen = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const { accessToken, loading: authLoad } = useSelector((state) => state.auth);
+  const [activateMoreFeatures, setActivateMoreFeatures] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const { video, loading } = useSelector((state) => state.selectedVideo);
@@ -32,6 +34,12 @@ const WatchScreen = () => {
     }
     return () => clearTimeout(timeoutID);
   }, [showAlert]);
+
+  useEffect(() => {
+    if (accessToken) {
+      setActivateMoreFeatures(true);
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     dispatch(getVideoById(id));
@@ -68,8 +76,9 @@ const WatchScreen = () => {
               videoId={id}
               setShowAlert={setShowAlert}
               setAlertMessage={setAlertMessage}
+              activateMoreFeatures={activateMoreFeatures}
             />
-            <Comments video={video} videoId={id} />
+            <Comments video={video} videoId={id} activateMoreFeatures={activateMoreFeatures} />
           </>
         ) : (
           <h5>Loading...</h5>

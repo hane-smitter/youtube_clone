@@ -24,7 +24,7 @@ import {
 import request from "../../api";
 
 export const getPopularVideos =
-  (loadState = true) =>
+  (loadState = true, config = {}) =>
   async (dispatch, getState) => {
     try {
       loadState &&
@@ -32,6 +32,7 @@ export const getPopularVideos =
           type: HOME_VIDEOS_REQUEST,
         });
       const { data } = await request("/getPopularVideos", {
+        ...config,
         params: {
           nextPageToken: getState().homeVideos.nextPageToken,
           region: getState().region.countryCode,
@@ -63,7 +64,7 @@ export const getPopularVideos =
     }
   };
 export const getVideosByCategory =
-  (keyword, loadState = true) =>
+  (keyword, loadState = true, config = {}) =>
   async (dispatch, getState) => {
     try {
       loadState &&
@@ -71,6 +72,7 @@ export const getVideosByCategory =
           type: HOME_VIDEOS_REQUEST,
         });
       const { data } = await request("/getVideosByCategory", {
+        ...config,
         params: {
           nextPageToken: getState().homeVideos.nextPageToken,
           keyword,
@@ -265,4 +267,3 @@ export const getMyLikedVideos =
       });
     }
   };
-

@@ -99,8 +99,6 @@ exports.addComment = (req, res) => {
   //       );
   //   });
 
-  
-
   let { id, text, accessToken } = req.query;
   if (!id) {
     id = req.query.id;
