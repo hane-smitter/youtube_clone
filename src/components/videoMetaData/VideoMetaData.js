@@ -84,7 +84,7 @@ const VideoMetaData = ({
       await request.post("/likeVideo", { accessToken, id: videoId, rating });
       setInitRating({ ...initRating, disliked: rating === "dislike" });
     } catch (err) {
-      console.log("initial rating", initRating.current);
+      // console.log("initial rating", initRating.current);
       setVideoDisliked(Boolean(initRating.current?.disliked));
       setVideoLiked(Boolean(initRating.current?.liked));
       setShowAlert(true);

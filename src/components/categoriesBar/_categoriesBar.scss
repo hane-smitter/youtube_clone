@@ -1,10 +1,11 @@
 @import "../../variables";
 
 .categories-bar {
-    padding-block: 0-5rem;
+    padding-block: 0.5rem;
     font-size: 0.8rem;
     display: flex;
     overflow-x: scroll;
+    margin-block: 5px;
 
     &::-webkit-scrollbar {
         width: 0px;

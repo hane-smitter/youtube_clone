@@ -31,8 +31,6 @@ const HomescreenTwo = () => {
     };
   }, [dispatch]);
 
-
-
   const fetchMoreData = () => {
     const controller = new AbortController();
     if (activeCategory === "All") {
@@ -48,7 +46,10 @@ const HomescreenTwo = () => {
 
   return (
     <>
-      <Container>
+      <Container
+        id={"infinite-scroll-trigger-target"}
+        style={{ height: "100%", overflowY: "auto" }}
+      >
         <HelmetCustom
           description={"Most popular Videos in the region"}
           title={"Most popular Charts"}
@@ -63,6 +64,7 @@ const HomescreenTwo = () => {
           }
           hasMore={true}
           className="row"
+          scrollableTarget="infinite-scroll-trigger-target"
         >
           {loading
             ? Array.from({ length: 20 }).map((item, index) => (

@@ -46,7 +46,7 @@ const WatchScreen = () => {
     dispatch(getRelatedVideos(id));
   }, [dispatch, id]);
   return (
-    <Row>
+    <Row className="w-100 h-100 scrollable-parent">
       <div className="alert-box">
         {showAlert && (
           <Alert
@@ -58,7 +58,7 @@ const WatchScreen = () => {
           </Alert>
         )}
       </div>
-      <Col lg={8}>
+      <Col lg={8} className="scrollable-child">
         <div className="watchscreen__player">
           <iframe
             src={`https://www.youtube.com/embed/${id}?rel=0`}
@@ -84,7 +84,7 @@ const WatchScreen = () => {
           <h5>Loading...</h5>
         )}
       </Col>
-      <Col lg={4}>
+      <Col lg={4} className="scrollable-child">
         {!loading ? (
           relatedVideos
             ?.filter((relatedVideo) => relatedVideo.snippet)

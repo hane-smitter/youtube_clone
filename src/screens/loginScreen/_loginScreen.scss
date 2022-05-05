@@ -1,4 +1,4 @@
-@import '../../variables';
+@import "../../variables";
 
 .login {
     height: 100vh;
@@ -20,12 +20,37 @@
         }
 
         button {
-            padding: .5rem;
+            padding: 0.5rem;
             border: none;
             border-radius: 5px;
-            margin-block: .5rem 1rem;
-            &:focus{
+            margin-block: 0.5rem 1rem;
+            &:focus {
                 outline: none;
+            }
+        }
+
+        .error-box {
+            margin-block: 10px;
+            margin-block-end: 15px;
+
+            .alert-customize {
+                margin-bottom: 0;
+                display: grid;
+                grid-template-rows: 20px 1fr;
+                padding: 0.4rem;
+                padding-right: 1rem;
+                width: 500px;
+                button.btn-close {
+                    grid-row: 1;
+                    margin: 0;
+                    padding: 0;
+                    position: static;
+                    justify-self: end;
+                }
+                span {
+                    grid-row: 2;
+                    font-size: 0.85rem;
+                }
             }
         }
     }

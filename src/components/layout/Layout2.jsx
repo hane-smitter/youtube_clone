@@ -18,7 +18,7 @@ const Layout_v2 = () => {
       <HeaderV2 toggle={toggle} />
       <div className="app__container">
         <SideBarV2 showSidebar={showSidebar} toggle={toggle} />
-        <Container fluid className="app__main">
+        <Container fluid className="app__main" id="scrollable-container">
           <Outlet />
         </Container>
       </div>

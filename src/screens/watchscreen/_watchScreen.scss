@@ -15,10 +15,30 @@
     background-color: #353946;
     width: 100%;
     margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.scrollable-parent {
+    overflow-y: auto;
+}
+.scrollable-child {
+    height: auto;
+    overflow-y: unset;
 }
 
 @media (max-width: $breakpoint-small) {
     .watchscreen__player {
         height: 35vh;
+    }
+}
+@media (min-width: 992px) {
+    .scrollable-parent {
+        overflow-y: unset;
+    }
+    .scrollable-child {
+        overflow-y: auto;
+        height: 100%;
     }
 }
