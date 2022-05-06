@@ -6,6 +6,7 @@ import { Alert } from "react-bootstrap";
 import { login } from "../../redux/actions/auth.action";
 import "./_loginScreen.scss";
 import HelmetCustom from "../../components/HelmetCustom";
+import YTlogo from "../../images/youtube.png";
 
 const LoginScreen = () => {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const LoginScreen = () => {
           </div>
         )}
         <img
-          src="https://pngimg.com/uploads/youtube/youtube_PNG2.png"
+          src={YTlogo}
           alt=""
           width={130}
         />

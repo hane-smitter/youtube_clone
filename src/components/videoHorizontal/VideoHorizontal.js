@@ -9,7 +9,13 @@ import "./_videoHorizontal.scss";
 import request from "../../api";
 import { useNavigate } from "react-router-dom";
 
-const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen, likedVidsScreen }) => {
+const VideoHorizontal = ({
+  video,
+  searchScreeen,
+  subscriptionsScreen,
+  likedVidsScreen,
+  activateMoreFeatures,
+}) => {
   const {
     id,
     snippet: {
@@ -36,10 +42,13 @@ const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen, likedVidsS
   const _channelId = resourceId?.channelId || channelId;
 
   const handleRelatedVideoClick = () => {
+    let padUrl = `${activateMoreFeatures ? "/a" : ""}`;
+    const scrollContainer = document.querySelector(".scrollable-parent");
+    scrollContainer?.scroll(0, 0);
     if (isVideo) {
-      navigate(`/a/watch/${_videoId}`);
+      navigate(`${padUrl}/watch/${_videoId}`);
     } else {
-      navigate(`/a/channel/${_channelId}`);
+      navigate(`${padUrl}/channel/${_channelId}`);
     }
   };
 
@@ -100,8 +109,8 @@ const VideoHorizontal = ({ video, searchScreeen, subscriptionsScreen, likedVidsS
         </p>
         {isVideo && (
           <div className="videoHorizontal__details d-flex align-items-center">
-            <AiFillEye />
-            {millify(views ?? 0)} views •{moment(publishedAt).fromNow()}
+            <AiFillEye />{" "}
+            {millify(views ?? 0)} views • {moment(publishedAt).fromNow()}
           </div>
         )}
         {(searchScreeen || subscriptionsScreen) && (

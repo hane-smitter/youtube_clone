@@ -4,6 +4,8 @@ import { AiFillEye } from "react-icons/ai";
 import moment from "moment";
 import millify from "millify";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { decode } from "html-entities";
+import ReactTooltip from "react-tooltip";
 
 import request from "../../api";
 import "./_video.scss";
@@ -25,6 +27,7 @@ const Video = ({ video, channelScreen }) => {
     },
     contentDetails,
   } = video;
+  const titleDecoded = decode(title);
 
   const ms = moment.duration(duration).asMilliseconds();
   const _duration = moment(ms).format("mm:ss");
@@ -65,12 +68,15 @@ const Video = ({ video, channelScreen }) => {
 
   return (
     <div className="video" onClick={handleVideoClick}>
+      <ReactTooltip />
       <div className="video__top">
-        <LazyLoadImage src={medium.url} alt={title} effect="blur" />
+        <LazyLoadImage src={medium.url} alt={titleDecoded} effect="blur" />
         <span className="video__top__duration">{_duration}</span>
       </div>
       <div className="video__title">
-        <abbr title={title}>{title}</abbr>
+        <p className="text" data-tip={titleDecoded}>
+          {titleDecoded}
+        </p>
       </div>
       <div className="video__details">
         <span>

@@ -6,7 +6,16 @@ const Footer = () => {
   return (
     <footer className="footer-root">
       <p className="footer-root__txt">
-        copyright &copy; {new Date().getFullYear()}
+        By{" "}
+        <a
+          href="https://lookupzach.netlify.app"
+          className="footer-root__lnk"
+          target="_blank"
+          rel="noreferrer"
+        >
+          zacky
+        </a>
+        {" "}copyright &copy; {new Date().getFullYear()}
       </p>
     </footer>
   );

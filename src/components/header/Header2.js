@@ -5,6 +5,7 @@ import { MdNotifications, MdApps, MdAccountCircle } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 import "./_header.scss";
+import YTlogo from "../../images/youtube.png";
 
 const Header_v2 = ({ toggle }) => {
   const [searchTxt, setSearchTxt] = useState("");
@@ -20,7 +21,7 @@ const Header_v2 = ({ toggle }) => {
       <div className="border border-dark header">
         <FaBars className="header__menu" onClick={() => toggle()} />
         <img
-          src="https://pngimg.com/uploads/youtube/youtube_PNG2.png"
+          src={YTlogo}
           className="header__logo"
           alt="logo"
           height={20}

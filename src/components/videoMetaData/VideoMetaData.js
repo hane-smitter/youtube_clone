@@ -17,9 +17,10 @@ import {
 } from "../../redux/actions/channel.action";
 import HelmetCustom from "../HelmetCustom";
 import request from "../../api.js";
+import { decode } from "html-entities";
 
 const VideoReactionFeedback = {
-  success: "Reaction recorded:)",
+  success: "Reacted to video:)",
   auth_warning: "You need to login to react to this video",
   info: "You need to have a youtube channel linked with your google account, to react to this video",
   error: "Could not react to the video. Try again later!",
@@ -149,16 +150,16 @@ const VideoMetaData = ({
     <div className="videoMetaData py-2">
       <HelmetCustom
         description={video?.snippet?.description}
-        title={video?.snippet?.title}
+        title={decode(video?.snippet?.title)}
       />
       <div className="videoMetaData__top">
-        <h5>{video?.snippet?.title}</h5>
+        <h5>{decode(video?.snippet?.title)}</h5>
         <div className="d-flex justify-content-between align-items-center py-1">
           <span>
             {parseInt(video?.statistics?.viewCount) > 100000
               ? millify(video?.statistics?.viewCount ?? 0)
               : video?.statistics?.viewCount}{" "}
-            views •{moment(video?.snippet?.publishedAt).fromNow()}
+            views • {moment(video?.snippet?.publishedAt).fromNow()}
           </span>
           <div className="d-flex align-items-center">
             <span className="d-flex align-items-center">

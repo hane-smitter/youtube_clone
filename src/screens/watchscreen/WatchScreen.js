@@ -12,6 +12,7 @@ import {
   getVideoById,
 } from "../../redux/actions/videos.action";
 import "./_watchScreen.scss";
+import { decode } from "html-entities";
 
 const WatchScreen = () => {
   const { id } = useParams();
@@ -63,7 +64,7 @@ const WatchScreen = () => {
           <iframe
             src={`https://www.youtube.com/embed/${id}?rel=0`}
             frameBorder={0}
-            title={video?.snippet?.title}
+            title={decode(video?.snippet?.title)}
             allowFullScreen
             height="100%"
             width="100%"
@@ -92,6 +93,7 @@ const WatchScreen = () => {
               return (
                 <VideoHorizontal
                   video={relatedVideo}
+                  activateMoreFeatures={activateMoreFeatures}
                   key={`${video?.id.videoId + "" + index}`}
                 />
               );

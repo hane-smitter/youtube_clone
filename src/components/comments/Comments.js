@@ -8,6 +8,7 @@ import {
   addComment,
 } from "../../redux/actions/comments.action";
 
+
 const Comments = ({ video, videoId, activateMoreFeatures }) => {
   const dispatch = useDispatch();
   const { comments, loading } = useSelector((state) => state.commentsList);
