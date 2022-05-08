@@ -57,17 +57,21 @@ exports.getVideosByCategory = (req, res) => {
 
   let pgToken = req.query.nextPageToken;
   let keyword = req.query.keyword;
+  let totalResults = req.query.totalResults;
   if (!pgToken) {
     pgToken = req.body.nextPageToken;
   }
   if (!keyword) {
     keyword = req.body.keyword;
   }
+  if (!totalResults) {
+    totalResults = req.body.totalResults;
+  }
 
   request("/search", {
     params: {
       part: "snippet",
-      maxResults: 20,
+      maxResults: totalResults || 20,
       pageToken: pgToken,
       q: keyword,
       type: "video",

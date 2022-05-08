@@ -231,8 +231,9 @@ const VideoMetaData = ({
           less="SHOW LESS"
           anchorClass="showMoreText"
           expanded={false}
-          dangerouslySetInnerHTML={createMarkup()}
-        ></ShowMoreText>
+        >
+          <div dangerouslySetInnerHTML={createMarkup()} />
+        </ShowMoreText>
       </div>
     </div>
   );

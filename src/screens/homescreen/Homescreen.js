@@ -13,6 +13,7 @@ import SkeletonVideo from "../../components/skeletons/Skeleton";
 import HelmetCustom from "../../components/HelmetCustom";
 
 const Homescreen = () => {
+  const { countryCode } = useSelector((state) => state.region);
   const dispatch = useDispatch();
   const { videos, activeCategory, loading } = useSelector(
     (state) => state.homeVideos
@@ -40,7 +41,7 @@ const Homescreen = () => {
     >
       <HelmetCustom
         description={"Most popular Videos in the region"}
-        title={"Most popular Charts"}
+        title={`Most popular Charts${countryCode && " | " + countryCode}`}
       />
       <CategoriesBar />
       <InfiniteScroll

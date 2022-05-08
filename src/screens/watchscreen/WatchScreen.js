@@ -13,6 +13,7 @@ import {
 } from "../../redux/actions/videos.action";
 import "./_watchScreen.scss";
 import { decode } from "html-entities";
+import CategoriesBar from "../../components/categoriesBar/CategoriesBar";
 
 const WatchScreen = () => {
   const { id } = useParams();
@@ -79,14 +80,32 @@ const WatchScreen = () => {
               setAlertMessage={setAlertMessage}
               activateMoreFeatures={activateMoreFeatures}
             />
-            <Comments video={video} videoId={id} activateMoreFeatures={activateMoreFeatures} />
+            <Comments
+              video={video}
+              videoId={id}
+              activateMoreFeatures={activateMoreFeatures}
+            />
           </>
         ) : (
           <h5>Loading...</h5>
         )}
       </Col>
       <Col lg={4} className="scrollable-child">
-        {!loading ? (
+        {!loading && (
+          <CategoriesBar
+            categories={video?.snippet?.tags}
+            watchScreen={true.toString()}
+            videoId={video?.id?.videoId ?? video?.id}
+            // updateRelatedVids={updateRelatedVids}
+            style={{
+              position: "sticky",
+              top: 0,
+              zIndex: 20,
+              backgroundColor: "#333",
+            }}
+          />
+        )}
+        {!loading && !relatedVideosLoading ? (
           relatedVideos
             ?.filter((relatedVideo) => relatedVideo.snippet)
             ?.map((relatedVideo, index) => {
@@ -94,6 +113,7 @@ const WatchScreen = () => {
                 <VideoHorizontal
                   video={relatedVideo}
                   activateMoreFeatures={activateMoreFeatures}
+                  watchScreen={true.toString()}
                   key={`${video?.id.videoId + "" + index}`}
                 />
               );

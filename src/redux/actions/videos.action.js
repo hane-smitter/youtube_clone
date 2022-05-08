@@ -64,39 +64,85 @@ export const getPopularVideos =
     }
   };
 export const getVideosByCategory =
-  (keyword, loadState = true, config = {}) =>
+  (keyword, loadState = true, relatedVideos, config = {}) =>
   async (dispatch, getState) => {
-    try {
-      loadState &&
-        dispatch({
-          type: HOME_VIDEOS_REQUEST,
+    const shouldFetchRelatedVideos = relatedVideos === "related_videos";
+    // console.log("shouldFetchRelatedVideos ", shouldFetchRelatedVideos);
+    // console.log("not load stATE ", !loadState);
+
+    async function APICALL(apiToCall, config = {}) {
+      if (apiToCall === "related_videos") {
+        const resp = await request("/getVideosByCategory", {
+          ...config,
+          params: {
+            keyword,
+            totalResults: 15,
+          },
         });
-      const { data } = await request("/getVideosByCategory", {
+        return resp;
+      }
+
+      const resp = await request("/getVideosByCategory", {
         ...config,
         params: {
           nextPageToken: getState().homeVideos.nextPageToken,
           keyword,
         },
       });
+      return resp;
+    }
 
-      dispatch({
-        type: HOME_VIDEOS_SUCCESS,
-        payload: {
-          videos: data.items,
-          nextPageToken: data.nextPageToken,
-          category: keyword,
-        },
-      });
+    function dispatcher() {
+      const dispatchTypeStart =
+        shouldFetchRelatedVideos && !loadState
+          ? RELATED_VIDEOS_REQUEST
+          : HOME_VIDEOS_REQUEST;
+      console.log("dispatchTypeStart ", dispatchTypeStart);
+      const dispatchTypeEnd =
+        shouldFetchRelatedVideos && !loadState
+          ? RELATED_VIDEOS_SUCCESS
+          : HOME_VIDEOS_SUCCESS;
+      const dispatchTypeEndFail =
+        shouldFetchRelatedVideos && !loadState
+          ? RELATED_VIDEOS_FAIL
+          : HOME_VIDEOS_FAIL;
+      return {
+        start: dispatchTypeStart,
+        end: dispatchTypeEnd,
+        fail: dispatchTypeEndFail,
+      };
+    }
+    try {
+      dispatch({ type: dispatcher().start });
+
+      const { data } = await APICALL(relatedVideos, {});
+
+      if (dispatcher().end === RELATED_VIDEOS_SUCCESS) {
+        dispatch({
+          type: RELATED_VIDEOS_SUCCESS,
+          payload: data.items,
+        });
+      } else {
+        dispatch({
+          type: HOME_VIDEOS_SUCCESS,
+          payload: {
+            videos: data.items,
+            nextPageToken: data.nextPageToken,
+            category: keyword,
+          },
+        });
+      }
     } catch (err) {
       console.group("YOUTUBE Categories FAILED ...frm video.actions");
       console.error(err);
       console.groupEnd();
       dispatch({
-        type: HOME_VIDEOS_FAIL,
-        payload: err.message,
+        type: dispatcher().fail,
+        payload: err?.response?.data?.message,
       });
     }
   };
+
 export const getVideoById = (id) => async (dispatch) => {
   try {
     dispatch({
