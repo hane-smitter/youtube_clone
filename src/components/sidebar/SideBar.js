@@ -54,7 +54,7 @@ const SideBar = ({ showSidebar, toggle }) => {
           <span>Library</span>
         </li>
         <li>
-          <MdSentimentDissatisfied data-tip="..." />
+          <MdSentimentDissatisfied data-tip="***" />
           <span>I don't know</span>
         </li>
         <hr />

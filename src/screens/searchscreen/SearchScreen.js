@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Container } from "react-bootstrap";
 
 import { getVideosBySearch } from "../../redux/actions/videos.action";
@@ -26,7 +25,7 @@ const SearchScreen = () => {
             <VideoHorizontal
               video={video}
               key={`${video.id.videoId}${index}`}
-              searchScreen
+              searchScreen={true.toString()}
             />
           );
         })

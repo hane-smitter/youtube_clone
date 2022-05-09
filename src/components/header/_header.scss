@@ -19,11 +19,21 @@
         margin-inline-end: .4rem;
     }
 
+    &__logo-area {
+        display: flex;
+
+        sup {
+            font-size: 9px;
+            letter-spacing: 0.9px;
+            margin-inline-start: 5px;
+        }
+    }
+
     &__logo {
         /* width: 10px;
         height: 30px; */
         object-fit: contain;
-        display: block;
+        // display: block;
     }
 
     form {

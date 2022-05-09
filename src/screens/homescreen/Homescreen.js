@@ -48,7 +48,11 @@ const Homescreen = () => {
         dataLength={videos.length}
         next={fetchMoreData}
         loader={
-          <div className="spinner-border text-danger d-block mx-auto"></div>
+          <div className="w-100">
+            <div className="spinner-style mx-auto">
+              <div className="spinner-border text-danger mx-auto"></div>
+            </div>
+          </div>
         }
         hasMore={true}
         className="row"

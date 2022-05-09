@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaBars } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import { AiOutlineSearch } from "react-icons/ai";
 import { MdNotifications, MdApps, MdAccountCircle } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +9,8 @@ import "./_header.scss";
 import YTlogo from "../../images/youtube.png";
 
 const Header_v2 = ({ toggle }) => {
+  const { countryCode } = useSelector((state) => state.region);
+
   const [searchTxt, setSearchTxt] = useState("");
   const navigate = useNavigate();
 
@@ -20,12 +23,10 @@ const Header_v2 = ({ toggle }) => {
     <>
       <div className="border border-dark header">
         <FaBars className="header__menu" onClick={() => toggle()} />
-        <img
-          src={YTlogo}
-          className="header__logo"
-          alt="logo"
-          height={20}
-        />
+        <div className="header__logo-area">
+          <img src={YTlogo} className="header__logo" alt="logo" height={20} />
+          <sup>{countryCode}</sup>
+        </div>
         <form onSubmit={handleSearchTxtSubmit}>
           <input
             type="text"

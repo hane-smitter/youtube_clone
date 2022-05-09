@@ -5,12 +5,14 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 import VideoHorizontal from "../../components/videoHorizontal/VideoHorizontal";
 import { getSubscribedChannels } from "../../redux/actions/videos.action";
+import { useAuthDetect } from "../../hooks/useAuthDetect";
 
 const SubscriptionsScreen = () => {
   const dispatch = useDispatch();
   const { channels, loading } = useSelector(
     (state) => state.subscribedChannels
   );
+  const { isAuthenticated: unlockFeatures } = useAuthDetect();
   useEffect(() => {
     dispatch(getSubscribedChannels());
   }, [dispatch]);
@@ -19,7 +21,12 @@ const SubscriptionsScreen = () => {
     <Container>
       {!loading ? (
         channels.map((channel, index) => (
-          <VideoHorizontal video={channel} subscriptionsScreen key={`${channel.id}${index}`} />
+          <VideoHorizontal
+            video={channel}
+            subscriptionsScreen={true.toString()}
+            key={`${channel.id}${index}`}
+            activateMoreFeatures={unlockFeatures}
+          />
         ))
       ) : (
         <SkeletonTheme baseColor="#343A40" highlightColor="#3C4147">

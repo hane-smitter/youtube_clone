@@ -14,6 +14,7 @@ import {
 import "./_watchScreen.scss";
 import { decode } from "html-entities";
 import CategoriesBar from "../../components/categoriesBar/CategoriesBar";
+import { useAuthDetect } from "../../hooks/useAuthDetect";
 
 const WatchScreen = () => {
   const { id } = useParams();
@@ -26,6 +27,7 @@ const WatchScreen = () => {
   const { videos: relatedVideos, loading: relatedVideosLoading } = useSelector(
     (state) => state.relatedVideos
   );
+  const { isAuthenticated: unlockFeatures } = useAuthDetect();
   useEffect(() => {
     let timeoutID;
     if (showAlert) {
@@ -37,11 +39,11 @@ const WatchScreen = () => {
     return () => clearTimeout(timeoutID);
   }, [showAlert]);
 
-  useEffect(() => {
-    if (accessToken) {
-      setActivateMoreFeatures(true);
-    }
-  }, [accessToken]);
+  // useEffect(() => {
+  //   if (accessToken) {
+  //     setActivateMoreFeatures(true);
+  //   }
+  // }, [accessToken]);
 
   useEffect(() => {
     dispatch(getVideoById(id));
@@ -78,12 +80,12 @@ const WatchScreen = () => {
               videoId={id}
               setShowAlert={setShowAlert}
               setAlertMessage={setAlertMessage}
-              activateMoreFeatures={activateMoreFeatures}
+              activateMoreFeatures={unlockFeatures}
             />
             <Comments
               video={video}
               videoId={id}
-              activateMoreFeatures={activateMoreFeatures}
+              activateMoreFeatures={unlockFeatures}
             />
           </>
         ) : (
@@ -112,7 +114,7 @@ const WatchScreen = () => {
               return (
                 <VideoHorizontal
                   video={relatedVideo}
-                  activateMoreFeatures={activateMoreFeatures}
+                  activateMoreFeatures={unlockFeatures}
                   watchScreen={true.toString()}
                   key={`${video?.id.videoId + "" + index}`}
                 />

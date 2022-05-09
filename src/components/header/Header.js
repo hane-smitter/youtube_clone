@@ -9,6 +9,8 @@ import "./_header.scss";
 import YTlogo from "../../images/youtube.png";
 
 const Header = ({ toggle }) => {
+  const { countryCode } = useSelector((state) => state.region);
+
   const [searchTxt, setSearchTxt] = useState("");
   const navigate = useNavigate();
   const { photoURL, name } = useSelector((state) => state?.auth?.user || {});
@@ -22,12 +24,10 @@ const Header = ({ toggle }) => {
     <>
       <div className="border border-dark header">
         <FaBars className="header__menu" onClick={() => toggle()} />
-        <img
-          src={YTlogo}
-          className="header__logo"
-          alt="logo"
-          height={20}
-        />
+        <div className="header__logo-area">
+          <img src={YTlogo} className="header__logo" alt="logo" height={20} />
+          <sup>{countryCode}</sup>
+        </div>
         <form onSubmit={handleSearchTxtSubmit}>
           <input
             type="text"
