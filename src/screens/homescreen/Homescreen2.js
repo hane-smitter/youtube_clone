@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Container, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -14,12 +14,13 @@ import SkeletonVideo from "../../components/skeletons/Skeleton";
 import HelmetCustom from "../../components/HelmetCustom";
 
 const HomescreenTwo = () => {
-  const { countryCode } = useSelector((state) => state.region);
+  const { countryCode } = useSelector(
+    (state) => state.region
+  );
   const dispatch = useDispatch();
   const { videos, activeCategory, loading } = useSelector(
     (state) => state.homeVideos
   );
-
   useEffect(() => {
     const controller = new AbortController();
     let isMounted = true;
@@ -62,7 +63,9 @@ const HomescreenTwo = () => {
           next={fetchMoreData}
           loader={
             <div className="w-100">
-              <div className="spinner-border text-danger mx-auto"></div>
+              <div className="spinner-style mx-auto">
+                <div className="spinner-border text-danger mx-auto"></div>
+              </div>
             </div>
           }
           hasMore={true}

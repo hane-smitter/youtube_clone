@@ -12,14 +12,21 @@ exports.getPopularVideos = (req, res) => {
   }
 
   let pgToken = req.query.nextPageToken;
-  const region = req.query.region || "KE";
+  let region = req.query.region;
   if (!pgToken) {
     pgToken = req.body.nextPageToken;
+  }
+  if (!region) {
+    region = req.body.region || "KE";
   }
   let parts = req.query.parts;
   if (!parts) {
     parts = req.body.parts;
   }
+
+  // console.log("-------------------------------------------------");
+  // console.log("REGION:::: ", region);
+  // console.log("-------------------------------------------------");
 
   request("/videos", {
     params: {

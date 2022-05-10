@@ -6,9 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import HelmetCustom from "../../components/HelmetCustom";
 import VideoHorizontal from "../../components/videoHorizontal/VideoHorizontal";
 import { getMyLikedVideos } from "../../redux/actions/videos.action";
+import { useAuthDetect } from "../../hooks/useAuthDetect";
 
 const LikedVideosScreen = () => {
   const dispatch = useDispatch();
+  const { isAuthenticated: unlockFeatures } = useAuthDetect();
   const { videos, loading } = useSelector((state) => state.myLikedVideos);
 
   useEffect(() => {
@@ -33,13 +35,22 @@ const LikedVideosScreen = () => {
           dataLength={videos.length}
           next={fetchMoreData}
           loader={
-            <div className="spinner-border text-danger d-block mx-auto"></div>
+            <div className="w-100">
+              <div className="mx-auto">
+                <div className="spinner-border text-danger mx-auto"></div>
+              </div>
+            </div>
           }
           hasMore={true}
           className="row"
         >
           {videos.map((video, index) => (
-          <VideoHorizontal key={index} video={video} likedVidsScreen />
+            <VideoHorizontal
+              key={index}
+              video={video}
+              likedVidsScreen
+              activateMoreFeatures={unlockFeatures}
+            />
           ))}
         </InfiniteScroll>
       )}

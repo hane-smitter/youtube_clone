@@ -19,8 +19,6 @@ import { useAuthDetect } from "../../hooks/useAuthDetect";
 const WatchScreen = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { accessToken, loading: authLoad } = useSelector((state) => state.auth);
-  const [activateMoreFeatures, setActivateMoreFeatures] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const { video, loading } = useSelector((state) => state.selectedVideo);

@@ -10,7 +10,7 @@ import ReactTooltip from "react-tooltip";
 import request from "../../api";
 import "./_video.scss";
 
-const Video = ({ video, channelScreen }) => {
+const Video = ({ video, channelScreen, activateMoreFeatures }) => {
   const navigate = useNavigate();
   const [views, setViews] = useState(null);
   const [duration, setDuration] = useState(null);
@@ -34,7 +34,8 @@ const Video = ({ video, channelScreen }) => {
   const _videoId = id?.videoId || contentDetails?.videoId || id;
 
   const handleVideoClick = () => {
-    navigate(`watch/${_videoId}`);
+    const padUrl = activateMoreFeatures ? "/a" : "";
+    navigate(`${padUrl}/watch/${_videoId}`);
   };
 
   useEffect(() => {

@@ -1,8 +1,13 @@
-import { GET_REGION_CODE_SUCCESS, GET_REGION_CODE_FAIL } from "../constants";
+import {
+  GET_REGION_CODE_SUCCESS,
+  GET_REGION_CODE_FAIL,
+  GET_REGION_CODE_REQUEST,
+} from "../constants";
 
 export const regionReducer = (
   prevState = {
     countryCode: null,
+    loading: true,
   },
   action
 ) => {
@@ -12,11 +17,18 @@ export const regionReducer = (
       return {
         ...prevState,
         countryCode: payload,
+        loading: false,
       };
     case GET_REGION_CODE_FAIL:
       return {
         ...prevState,
-        countryCode: "US",
+        countryCode: "KE",
+        loading: false,
+      };
+    case GET_REGION_CODE_REQUEST:
+      return {
+        ...prevState,
+        loading: true,
       };
     default:
       return prevState;

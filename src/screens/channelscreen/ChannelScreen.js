@@ -9,10 +9,12 @@ import { getPlaylistByChannelId } from "../../redux/actions/videos.action";
 import Video from "../../components/video/Video";
 import { getChannelDetails, checkSubscriptionStatus } from "../../redux/actions/channel.action";
 import { Col, Container, Row } from "react-bootstrap";
+import { useAuthDetect } from "../../hooks/useAuthDetect";
 
 const ChannelScreen = () => {
   const dispatch = useDispatch();
   const { channelId } = useParams();
+  const {isAuthenticated: unlockFeatures} = useAuthDetect();
 
   const { playlist: videos, loading } = useSelector(
     (state) => state.channelPlaylist
@@ -55,7 +57,7 @@ const ChannelScreen = () => {
           {!loading
             ? videos?.map((video, index) => (
                 <Col md={4} lg={3} key={index}>
-                  <Video video={video} channelScreen />
+                  <Video video={video} channelScreen activateMoreFeatures={unlockFeatures} />
                 </Col>
               ))
             : [...Array(15)].map((item, index) => (
