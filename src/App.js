@@ -22,9 +22,7 @@ import LayoutV2 from "./components/layout/Layout2";
 const App = () => {
   // const abortControllerRef = React.useRef(new AbortController());
   const dispatch = useDispatch();
-  const { countryCode, loading: countryCodeLoading } = useSelector(
-    (state) => state.region
-  );
+  const { loading: countryCodeLoading } = useSelector((state) => state.region);
   useLayoutEffect(() => {
     // console.log("fetching country code");
     async function getCountryCode() {

@@ -50,7 +50,7 @@ function CategoriesBar({ categories, watchScreen, videoId, ...rest }) {
   const handleClick = (value) => {
     setActiveElement(value);
     if (watchScreen) {
-      // console.log("watchScreen has run in cat bar");
+      console.log("watchScreen has run in cat bar");
       if (value === "All") {
         return dispatch(getRelatedVideos(videoId));
       }
@@ -79,4 +79,4 @@ function CategoriesBar({ categories, watchScreen, videoId, ...rest }) {
   );
 }
 
-export default CategoriesBar;
+export default React.memo(CategoriesBar);

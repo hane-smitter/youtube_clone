@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Container, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -14,13 +14,18 @@ import SkeletonVideo from "../../components/skeletons/Skeleton";
 import HelmetCustom from "../../components/HelmetCustom";
 
 const HomescreenTwo = () => {
-  const { countryCode } = useSelector(
-    (state) => state.region
-  );
+  const { countryCode } = useSelector((state) => state.region);
   const dispatch = useDispatch();
   const { videos, activeCategory, loading } = useSelector(
     (state) => state.homeVideos
   );
+  const optimalActiveCategory = useMemo(() => {
+    if (activeCategory) {
+      localStorage.setItem("videoCategory", JSON.stringify(activeCategory));
+    }
+    return activeCategory;
+  }, [activeCategory]);
+
   useEffect(() => {
     const controller = new AbortController();
     let isMounted = true;
@@ -35,7 +40,11 @@ const HomescreenTwo = () => {
 
   const fetchMoreData = () => {
     const controller = new AbortController();
-    if (activeCategory === "All") {
+    let standardControl =
+      optimalActiveCategory ||
+      JSON.parse(localStorage.getItem("videoCategory"));
+
+    if (standardControl === "All") {
       dispatch(getPopularVideos(false, { signal: controller?.signal }));
     } else {
       dispatch(

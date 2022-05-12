@@ -26,6 +26,9 @@ import request from "../../api";
 export const getPopularVideos =
   (loadState = true, config = {}) =>
   async (dispatch, getState) => {
+    console.group("loadState");
+    console.log(loadState);
+    console.groupEnd();
     try {
       loadState &&
         dispatch({

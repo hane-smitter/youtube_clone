@@ -15,6 +15,7 @@ const AuthGuardPrivate = ({ children }) => {
     if (accessToken === null) {
       navigate("/", { replace: true });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, loading]);
 
   if (loading) {
