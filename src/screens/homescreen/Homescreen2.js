@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Container, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -19,13 +19,21 @@ const HomescreenTwo = () => {
   const { videos, activeCategory, loading } = useSelector(
     (state) => state.homeVideos
   );
+  const [categoryInView, setCategoryInView] = useState(null);
   const optimalActiveCategory = useMemo(() => {
     if (activeCategory) {
+      setCategoryInView(activeCategory);
       localStorage.setItem("videoCategory", JSON.stringify(activeCategory));
     }
     return activeCategory;
   }, [activeCategory]);
 
+  useEffect(() => {
+    return () => {
+      localStorage.setItem("videoCategory", JSON.stringify("All"));
+      setCategoryInView("All");
+    };
+  }, []);
   useEffect(() => {
     const controller = new AbortController();
     let isMounted = true;
@@ -48,9 +56,14 @@ const HomescreenTwo = () => {
       dispatch(getPopularVideos(false, { signal: controller?.signal }));
     } else {
       dispatch(
-        getVideosByCategory(activeCategory, false, {
-          signal: controller?.signal,
-        })
+        getVideosByCategory(
+          activeCategory,
+          false,
+          { moreCat: "more_categories" },
+          {
+            signal: controller?.signal,
+          }
+        )
       );
     }
   };
@@ -66,7 +79,7 @@ const HomescreenTwo = () => {
           title={`Most popular Charts${countryCode && " | " + countryCode}`}
         />
 
-        <CategoriesBar />
+        <CategoriesBar activeCat={categoryInView} />
         <InfiniteScroll
           dataLength={videos.length}
           next={fetchMoreData}

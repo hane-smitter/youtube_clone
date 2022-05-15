@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import moment from "moment";
 import millify from "millify";
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 import "./_videoHorizontal.scss";
 import request from "../../api";
+import videoDuration from "../../util/videoDuration";
 
 const VideoHorizontal = ({
   video,
@@ -37,8 +38,13 @@ const VideoHorizontal = ({
   const [channelIcon, setChannelIcon] = useState(null);
   const navigate = useNavigate();
 
-  const ms = moment.duration(duration).asMilliseconds();
-  const _duration = moment(ms).format("mm:ss");
+  const _duration = useMemo(() => {
+    if (duration) {
+      return videoDuration(duration);
+    }
+    return "";
+  }, [duration]);
+
   const _videoId = id?.videoId ?? id;
   const thumbnail = !isVideo && "videoHorizontal__thumbnail-channel";
   const _channelId = resourceId?.channelId || channelId;

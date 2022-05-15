@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { AiFillEye } from "react-icons/ai";
-import moment from "moment";
 import millify from "millify";
+import moment from "moment";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { decode } from "html-entities";
 import ReactTooltip from "react-tooltip";
 
 import request from "../../api";
 import "./_video.scss";
+import videoDuration from "../../util/videoDuration";
 
 const Video = ({ video, channelScreen, activateMoreFeatures }) => {
   const navigate = useNavigate();
@@ -29,8 +30,13 @@ const Video = ({ video, channelScreen, activateMoreFeatures }) => {
   } = video;
   const titleDecoded = decode(title);
 
-  const ms = moment.duration(duration).asMilliseconds();
-  const _duration = moment(ms).format("mm:ss");
+  const _duration = useMemo(() => {
+    if (duration) {
+      return videoDuration(duration);
+    }
+    return "";
+  }, [duration]);
+  // const _duration = videoDuration(duration);
   const _videoId = id?.videoId || contentDetails?.videoId || id;
 
   const handleVideoClick = () => {

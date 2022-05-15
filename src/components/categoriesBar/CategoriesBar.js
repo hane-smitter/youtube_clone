@@ -9,7 +9,13 @@ import {
 } from "../../redux/actions/videos.action";
 import "./_categoriesBar.scss";
 
-function CategoriesBar({ categories, watchScreen, videoId, ...rest }) {
+function CategoriesBar({
+  categories,
+  watchScreen,
+  activeCat,
+  videoId,
+  ...rest
+}) {
   const [activeElement, setActiveElement] = useState("All");
 
   let customCats = [""];
@@ -48,15 +54,19 @@ function CategoriesBar({ categories, watchScreen, videoId, ...rest }) {
         ];
 
   const handleClick = (value) => {
+    console.log("categories active el", value);
     setActiveElement(value);
     if (watchScreen) {
-      console.log("watchScreen has run in cat bar");
+      // console.log("watchScreen has run in cat bar");
       if (value === "All") {
         return dispatch(getRelatedVideos(videoId));
       }
-      dispatch(getVideosByCategory(value, false, "related_videos"));
+      dispatch(
+        getVideosByCategory(value, false, { relatedVideos: "related_videos" })
+      );
       return;
     }
+
     if (value === "All") {
       dispatch(getPopularVideos());
     } else {

@@ -67,9 +67,15 @@ export const getPopularVideos =
     }
   };
 export const getVideosByCategory =
-  (keyword, loadState = true, relatedVideos, config = {}) =>
+  (
+    keyword,
+    loadState = true,
+    purpose = { relatedVideos: "", moreCat: "" },
+    config = {}
+  ) =>
   async (dispatch, getState) => {
-    const shouldFetchRelatedVideos = relatedVideos === "related_videos";
+    const shouldFetchRelatedVideos =
+      purpose?.relatedVideos === "related_videos";
     // console.log("shouldFetchRelatedVideos ", shouldFetchRelatedVideos);
     // console.log("not load stATE ", !loadState);
 
@@ -98,9 +104,11 @@ export const getVideosByCategory =
     function dispatcher() {
       const dispatchTypeStart =
         shouldFetchRelatedVideos && !loadState
-          ? RELATED_VIDEOS_REQUEST
+          ? purpose?.moreCat
+            ? ""
+            : RELATED_VIDEOS_REQUEST
           : HOME_VIDEOS_REQUEST;
-      console.log("dispatchTypeStart ", dispatchTypeStart);
+      // console.log("dispatchTypeStart ", dispatchTypeStart);
       const dispatchTypeEnd =
         shouldFetchRelatedVideos && !loadState
           ? RELATED_VIDEOS_SUCCESS
@@ -116,9 +124,10 @@ export const getVideosByCategory =
       };
     }
     try {
-      dispatch({ type: dispatcher().start });
+      dispatcher().start && dispatch({ type: dispatcher().start });
+      console.log("dispatcher().start  ", dispatcher().start);
 
-      const { data } = await APICALL(relatedVideos, {});
+      const { data } = await APICALL(purpose?.relatedVideos, {});
 
       if (dispatcher().end === RELATED_VIDEOS_SUCCESS) {
         dispatch({
