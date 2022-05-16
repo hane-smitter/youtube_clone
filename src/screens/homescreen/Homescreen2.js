@@ -19,19 +19,26 @@ const HomescreenTwo = () => {
   const { videos, activeCategory, loading } = useSelector(
     (state) => state.homeVideos
   );
-  const [categoryInView, setCategoryInView] = useState(null);
-  const optimalActiveCategory = useMemo(() => {
+  const [categoryInView, setCategoryInView] = useState("All");
+  // const activeCategory = useMemo(() => {
+  //   if (activeCategory) {
+  //     setCategoryInView(activeCategory);
+  //     localStorage.setItem("videoCategory", JSON.stringify(activeCategory));
+  //   }
+  //   return activeCategory;
+  // }, [activeCategory]);
+  useEffect(() => {
     if (activeCategory) {
+      console.log("cat in view set to: ", activeCategory);
       setCategoryInView(activeCategory);
       localStorage.setItem("videoCategory", JSON.stringify(activeCategory));
     }
-    return activeCategory;
   }, [activeCategory]);
 
   useEffect(() => {
     return () => {
       localStorage.setItem("videoCategory", JSON.stringify("All"));
-      setCategoryInView("All");
+      // setCategoryInView("All");
     };
   }, []);
   useEffect(() => {
@@ -49,8 +56,7 @@ const HomescreenTwo = () => {
   const fetchMoreData = () => {
     const controller = new AbortController();
     let standardControl =
-      optimalActiveCategory ||
-      JSON.parse(localStorage.getItem("videoCategory"));
+      activeCategory || JSON.parse(localStorage.getItem("videoCategory"));
 
     if (standardControl === "All") {
       dispatch(getPopularVideos(false, { signal: controller?.signal }));

@@ -16,7 +16,7 @@ function CategoriesBar({
   videoId,
   ...rest
 }) {
-  const [activeElement, setActiveElement] = useState("All");
+  const [activeElement, setActiveElement] = useState(activeCat || "All");
 
   let customCats = [""];
   if (categories?.length > 0) {
@@ -54,7 +54,7 @@ function CategoriesBar({
         ];
 
   const handleClick = (value) => {
-    console.log("categories active el", value);
+    // console.log("categories active el", value);
     setActiveElement(value);
     if (watchScreen) {
       // console.log("watchScreen has run in cat bar");
@@ -67,7 +67,10 @@ function CategoriesBar({
       return;
     }
 
+    console.log("cat bar setting local storAGE");
+    localStorage.setItem("videoCategory", JSON.stringify(value));
     if (value === "All") {
+      // console.log("hey categories bar getPopularvids FIRED!!")
       dispatch(getPopularVideos());
     } else {
       dispatch(getVideosByCategory(value));
