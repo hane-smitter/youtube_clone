@@ -67,11 +67,11 @@ function CategoriesBar({
       return;
     }
 
-    console.log("cat bar setting local storAGE");
+    // console.log("cat bar setting local storAGE");
     localStorage.setItem("videoCategory", JSON.stringify(value));
     if (value === "All") {
       // console.log("hey categories bar getPopularvids FIRED!!")
-      dispatch(getPopularVideos());
+      dispatch(getPopularVideos(undefined, { firstPg: true }));
     } else {
       dispatch(getVideosByCategory(value));
     }

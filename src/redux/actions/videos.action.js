@@ -24,7 +24,7 @@ import {
 import request from "../../api";
 
 export const getPopularVideos =
-  (loadState = true, config = {}) =>
+  (loadState = true, customize = { firstPg: false }, config = {}) =>
   async (dispatch, getState) => {
     console.group("loadState");
     console.log(loadState);
@@ -37,7 +37,8 @@ export const getPopularVideos =
       const { data } = await request("/getPopularVideos", {
         ...config,
         params: {
-          nextPageToken: getState().homeVideos.nextPageToken,
+          nextPageToken:
+            !customize?.firstPg ? getState().homeVideos.nextPageToken : undefined,
           region: getState().region.countryCode,
         },
       });

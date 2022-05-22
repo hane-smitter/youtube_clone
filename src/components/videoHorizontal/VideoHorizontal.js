@@ -61,6 +61,8 @@ const VideoHorizontal = ({
   };
 
   useEffect(() => {
+    let isMounted = true;
+
     const get_video_details = async () => {
       const {
         data: { items },
@@ -69,13 +71,17 @@ const VideoHorizontal = ({
           id: _videoId,
         },
       });
-      setViews(items[0]?.statistics?.viewCount);
-      setDuration(items[0]?.contentDetails?.duration);
+      isMounted && setViews(items[0]?.statistics?.viewCount);
+      isMounted && setDuration(items[0]?.contentDetails?.duration);
     };
 
     isVideo && get_video_details();
+
+    return () => (isMounted = false);
   }, [_videoId, isVideo]);
   useEffect(() => {
+    let isMounted = true;
+
     const get_channel_icon = async () => {
       const {
         data: { items },
@@ -84,9 +90,11 @@ const VideoHorizontal = ({
           id: channelId,
         },
       });
-      setChannelIcon(items[0].snippet.thumbnails.default);
+      isMounted && setChannelIcon(items[0].snippet.thumbnails.default);
     };
     get_channel_icon();
+
+    return () => (isMounted = false);
   }, [channelId]);
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -20,16 +20,10 @@ const HomescreenTwo = () => {
     (state) => state.homeVideos
   );
   const [categoryInView, setCategoryInView] = useState("All");
-  // const activeCategory = useMemo(() => {
-  //   if (activeCategory) {
-  //     setCategoryInView(activeCategory);
-  //     localStorage.setItem("videoCategory", JSON.stringify(activeCategory));
-  //   }
-  //   return activeCategory;
-  // }, [activeCategory]);
+
   useEffect(() => {
     if (activeCategory) {
-      console.log("cat in view set to: ", activeCategory);
+      // console.log("cat in view set to: ", activeCategory);
       setCategoryInView(activeCategory);
       localStorage.setItem("videoCategory", JSON.stringify(activeCategory));
     }

@@ -59,6 +59,7 @@ const App = () => {
             />
             <Route path="search/:query" element={<SearchScreen />} />
             <Route path="watch/:id" element={<WatchScreen />} />
+            <Route path="channel/:channelId" element={<ChannelScreen />} />
             <Route
               path="/auth"
               element={

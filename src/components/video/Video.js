@@ -45,6 +45,7 @@ const Video = ({ video, channelScreen, activateMoreFeatures }) => {
   };
 
   useEffect(() => {
+    let isMounted = true;
     const get_video_details = async () => {
       const {
         data: { items },
@@ -54,12 +55,15 @@ const Video = ({ video, channelScreen, activateMoreFeatures }) => {
           id: _videoId,
         },
       });
-      setViews(items[0]?.statistics?.viewCount);
-      setDuration(items[0]?.contentDetails?.duration);
+      isMounted && setViews(items[0]?.statistics?.viewCount);
+      isMounted && setDuration(items[0]?.contentDetails?.duration);
     };
     get_video_details();
+
+    return () => (isMounted = false);
   }, [_videoId]);
   useEffect(() => {
+    let isMounted = true;
     const get_channel_icon = async () => {
       const {
         data: { items },
@@ -68,9 +72,11 @@ const Video = ({ video, channelScreen, activateMoreFeatures }) => {
           id: channelId,
         },
       });
-      setChannelIcon(items[0]?.snippet?.thumbnails?.default);
+      isMounted && setChannelIcon(items[0]?.snippet?.thumbnails?.default);
     };
     get_channel_icon();
+
+    return () => (isMounted = false);
   }, [channelId]);
 
   return (

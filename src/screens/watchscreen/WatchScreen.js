@@ -62,9 +62,9 @@ const WatchScreen = () => {
       </div>
       <Col lg={8} className="scrollable-child">
         <div className="watchscreen__player">
-          {/* https://www.youtube.com/embed/${id}?rel=0  */}
+          {/* https://www.youtube.com/embed/${id}?playlist=${id}&autoplay=1&rel=0 */}
           <iframe
-            src={`https://www.youtube.com/embed/${id}?playlist=${id}&autoplay=1&rel=0`}
+            src={`https://www.youtube.com/embed/${id}?rel=0`}
             frameBorder={0}
             title={decode(video?.snippet?.title)}
             allowFullScreen

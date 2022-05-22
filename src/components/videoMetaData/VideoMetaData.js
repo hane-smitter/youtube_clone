@@ -39,10 +39,14 @@ const VideoMetaData = ({
   const [videoLiked, setVideoLiked] = useState(false);
   const [videoDisliked, setVideoDisliked] = useState(false);
   const initRating = useRef({});
-  const [, setInitRating] = useState({});
+  // const [, setInitRating] = useState({});
 
   function createMarkup() {
     return { __html: video?.snippet?.description.trim() };
+  }
+
+  function setInitRating(reactionTrack) {
+    initRating.current = reactionTrack;
   }
 
   const handleLikeVideo = async (rating = "like") => {
@@ -113,6 +117,8 @@ const VideoMetaData = ({
     // eslint-disable-next-line
   }, [dispatch, channelId]);
   useEffect(() => {
+    let isMounted = true;
+
     async function getVideoRating() {
       try {
         const { data } = await request("/getOneVideoRating", {
@@ -123,12 +129,13 @@ const VideoMetaData = ({
         });
         const liked = data["items"][0].rating === "like";
         const disliked = data["items"][0].rating === "dislike";
-        setVideoLiked(liked);
-        setVideoDisliked(disliked);
-        setInitRating({
-          liked,
-          disliked,
-        });
+        isMounted && setVideoLiked(liked);
+        isMounted && setVideoDisliked(disliked);
+        isMounted &&
+          setInitRating({
+            liked,
+            disliked,
+          });
       } catch (err) {
         setInitRating({
           liked: null,
@@ -138,6 +145,8 @@ const VideoMetaData = ({
       }
     }
     activateMoreFeatures && getVideoRating();
+
+    return () => (isMounted = false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, videoId, accessToken]);

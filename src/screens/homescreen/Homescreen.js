@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -18,7 +18,21 @@ const Homescreen = () => {
   const { videos, activeCategory, loading } = useSelector(
     (state) => state.homeVideos
   );
+  const [categoryInView, setCategoryInView] = useState("All");
 
+  useEffect(() => {
+    if (activeCategory) {
+      // console.log("cat in view set to: ", activeCategory);
+      setCategoryInView(activeCategory);
+      localStorage.setItem("videoCategory", JSON.stringify(activeCategory));
+    }
+  }, [activeCategory]);
+  useEffect(() => {
+    return () => {
+      localStorage.setItem("videoCategory", JSON.stringify("All"));
+      // setCategoryInView("All");
+    };
+  }, []);
   useEffect(() => {
     let isMounted = true;
     isMounted && dispatch(getPopularVideos());
@@ -27,10 +41,29 @@ const Homescreen = () => {
   }, [dispatch]);
 
   const fetchMoreData = () => {
-    if (activeCategory === "All") {
-      dispatch(getPopularVideos(false));
+    // if (activeCategory === "All") {
+    //   dispatch(getPopularVideos(false));
+    // } else {
+    //   dispatch(getVideosByCategory(activeCategory, false));
+    // }
+
+    const controller = new AbortController();
+    let standardControl =
+      activeCategory || JSON.parse(localStorage.getItem("videoCategory"));
+
+    if (standardControl === "All") {
+      dispatch(getPopularVideos(false, { signal: controller?.signal }));
     } else {
-      dispatch(getVideosByCategory(activeCategory, false));
+      dispatch(
+        getVideosByCategory(
+          activeCategory,
+          false,
+          { moreCat: "more_categories" },
+          {
+            signal: controller?.signal,
+          }
+        )
+      );
     }
   };
 
@@ -43,7 +76,7 @@ const Homescreen = () => {
         description={"Most popular Videos in the region"}
         title={`Most popular Charts${countryCode && " | " + countryCode}`}
       />
-      <CategoriesBar />
+      <CategoriesBar activeCat={categoryInView} />
       <InfiniteScroll
         dataLength={videos.length}
         next={fetchMoreData}
