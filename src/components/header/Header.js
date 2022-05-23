@@ -2,22 +2,25 @@ import React, { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { AiOutlineSearch } from "react-icons/ai";
-import { MdNotifications, MdApps } from "react-icons/md";
+import { MdNotifications, MdApps, MdAccountCircle } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 import "./_header.scss";
 import YTlogo from "../../images/youtube.png";
+import { useAuthDetect } from "../../hooks/useAuthDetect";
 
 const Header = ({ toggle }) => {
   const { countryCode } = useSelector((state) => state.region);
+  const { isAuthenticated } = useAuthDetect();
 
   const [searchTxt, setSearchTxt] = useState("");
   const navigate = useNavigate();
   const { photoURL, name } = useSelector((state) => state?.auth?.user || {});
 
   const handleSearchTxtSubmit = (e) => {
+    const padURL = isAuthenticated ? "/a" : "";
     e.preventDefault();
-    navigate(`/a/search/${searchTxt}`);
+    navigate(`${padURL}/search/${searchTxt}`);
   };
 
   return (
@@ -44,7 +47,11 @@ const Header = ({ toggle }) => {
         <div className="header__icons">
           <MdNotifications size={28} data-tip="Notifications" />
           <MdApps size={28} data-tip="Apps" />
-          <img src={photoURL} alt={name} data-tip={name || "User"} />
+          {isAuthenticated ? (
+            <img src={photoURL} alt={name} data-tip={name || "User"} />
+          ) : (
+            <MdAccountCircle size={28} data-tip="User" />
+          )}
         </div>
       </div>
     </>

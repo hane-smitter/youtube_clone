@@ -2,7 +2,7 @@ import { useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const useAuthDetect = () => {
-  const { accessToken } = useSelector((state) => state.auth);
+  const { accessToken, error } = useSelector((state) => state.auth);
   const [isAuth, setIsAuth] = useState(false);
 
   useLayoutEffect(() => {
@@ -15,6 +15,7 @@ const useAuthDetect = () => {
 
   return {
     isAuthenticated: isAuth,
+    error,
   };
 };
 

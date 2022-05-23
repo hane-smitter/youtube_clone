@@ -7,15 +7,18 @@ import {
   MdLibraryBooks,
   MdHome,
   MdSentimentDissatisfied,
+  MdLogin,
 } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { useAuthDetect } from "../../hooks/useAuthDetect";
 import { logout } from "../../redux/actions/auth.action";
 
 import "./_sideBar.scss";
 
 const SideBar = ({ showSidebar, toggle }) => {
   const dispatch = useDispatch();
+  const { isAuthenticated } = useAuthDetect();
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -27,41 +30,63 @@ const SideBar = ({ showSidebar, toggle }) => {
       onClick={() => toggle(false)}
     >
       <ul>
-        <Link to="/a">
+        <Link to={isAuthenticated ? "/a" : "/"}>
           <li>
             <MdHome size={23} data-tip="Home" />
             <span>Home</span>
           </li>
         </Link>
-        <Link to="feed/subscriptions">
+
+        {isAuthenticated && (
+          <Link to="a/feed/subscriptions">
+            <li>
+              <MdSubscriptions size={23} data-tip="Subscriptions" />
+              <span>Subscriptions</span>
+            </li>
+          </Link>
+        )}
+
+        {isAuthenticated && (
+          <Link to="a/feed/liked">
+            <li>
+              <MdThumbUp size={23} data-tip="Liked Videos" />
+              <span>Liked Videos</span>
+            </li>
+          </Link>
+        )}
+
+        {isAuthenticated && (
           <li>
-            <MdSubscriptions size={23} data-tip="Subscriptions" />
-            <span>Subscriptions</span>
+            <MdHistory size={23} data-tip="History" />
+            <span>History</span>
           </li>
-        </Link>
-        <Link to="feed/liked">
-          <li>
-            <MdThumbUp size={23} data-tip="Liked Videos" />
-            <span>Liked Videos</span>
-          </li>
-        </Link>
-        <li>
-          <MdHistory size={23} data-tip="History" />
-          <span>History</span>
-        </li>
+        )}
+
         <li>
           <MdLibraryBooks size={23} data-tip="Library" />
           <span>Library</span>
         </li>
-        <li>
-          <MdSentimentDissatisfied data-tip="***" />
-          <span>I don't know</span>
-        </li>
+
+        {isAuthenticated && (
+          <li>
+            <MdSentimentDissatisfied data-tip="***" />
+            <span>I don't know</span>
+          </li>
+        )}
         <hr />
-        <li onClick={logoutHandler}>
-          <MdLogout size={23} data-tip="Log out" />
-          <span>Log out</span>
-        </li>
+        {isAuthenticated ? (
+          <li onClick={logoutHandler}>
+            <MdLogout size={23} data-tip="Log out" />
+            <span>Log out</span>
+          </li>
+        ) : (
+          <Link to="/auth">
+            <li>
+              <MdLogin size={23} data-tip="Log In" />
+              <span>Sign In</span>
+            </li>
+          </Link>
+        )}
         <hr />
       </ul>
     </nav>

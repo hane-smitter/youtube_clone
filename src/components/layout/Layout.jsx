@@ -10,7 +10,7 @@ import SideBar from "../sidebar/SideBar";
 
 const Layout = () => {
   const [showSidebar, toggleSideBar] = React.useState(false);
-
+ 
   const toggle = () => toggleSideBar((_) => !_);
   return (
     <>

@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useRef, useState } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Alert } from "react-bootstrap";
 
 import { login } from "../../redux/actions/auth.action";
 import "./_loginScreen.scss";
 import HelmetCustom from "../../components/HelmetCustom";
 import YTlogo from "../../images/youtube.png";
+import { useAuthDetect } from "../../hooks/useAuthDetect";
 
 const LoginScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const [showAlert, setShowAlert] = useState(false);
   const [signInError, setSignInError] = useState("");
+  const to = useRef(location?.state?.from?.pathname || "/a");
 
-  const { accessToken, error } = useSelector((state) => state.auth);
+  const { isAuthenticated, error } = useAuthDetect();
 
   const handleCloseAlert = () => {
     setShowAlert(false);
@@ -24,10 +27,10 @@ const LoginScreen = () => {
   };
 
   useEffect(() => {
-    if (accessToken) {
-      navigate("/", { replace: true });
+    if (isAuthenticated) {
+      navigate(to.current, { replace: true });
     }
-  }, [accessToken, navigate]);
+  }, [isAuthenticated]);
   useEffect(() => {
     if (error?.length) {
       setSignInError(error);
@@ -35,7 +38,7 @@ const LoginScreen = () => {
     }
   }, [error]);
 
-  return (
+  return !isAuthenticated ? (
     <div className="login">
       <HelmetCustom
         description="Provide credentials to be authenticated"
@@ -54,11 +57,7 @@ const LoginScreen = () => {
             </Alert>
           </div>
         )}
-        <img
-          src={YTlogo}
-          alt=""
-          width={130}
-        />
+        <img src={YTlogo} alt="youtube logo" width={130} />
         <button onClick={handleLogin}>Login with Google</button>
         <p>
           This project mimics the functionality and user interface of{" "}
@@ -68,6 +67,8 @@ const LoginScreen = () => {
         </p>
       </div>
     </div>
+  ) : (
+    <Navigate to="/a" />
   );
 };
 

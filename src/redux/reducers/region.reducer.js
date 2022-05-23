@@ -22,7 +22,7 @@ export const regionReducer = (
     case GET_REGION_CODE_FAIL:
       return {
         ...prevState,
-        countryCode: "KE",
+        countryCode: "US",
         loading: false,
       };
     case GET_REGION_CODE_REQUEST:

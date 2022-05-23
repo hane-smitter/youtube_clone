@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-const AuthGuardPrivate = ({ children }) => {
+const AuthGuardPrivate = () => {
   const navigate = useNavigate();
-  const { accessToken, loading } = useSelector((state) => state.auth);
   const [hideView, setHideView] = useState(true);
-  //   const navigate = useNavigate();
+  const { accessToken, loading } = useSelector((state) => state.auth);
+  const location = useLocation();
 
   useEffect(() => {
-    if (accessToken) {
-      setHideView(false);
+    if (!accessToken) {
+      return navigate("/auth", { replace: true, state: { from: location } });
     }
-    if (accessToken === null) {
-      navigate("/", { replace: true });
-    }
+    setHideView(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken, loading]);
 
@@ -25,11 +23,10 @@ const AuthGuardPrivate = ({ children }) => {
       </div>
     );
   }
-  if (hideView) {
-    return null;
-  }
 
-  return children;
+  if (hideView) return null;
+
+  return <Outlet />;
 };
 
 export default AuthGuardPrivate;
