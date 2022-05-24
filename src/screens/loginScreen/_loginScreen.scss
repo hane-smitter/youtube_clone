@@ -32,6 +32,7 @@
         .error-box {
             margin-block: 10px;
             margin-block-end: 15px;
+            z-index: 999;
 
             .alert-customize {
                 margin-bottom: 0;
@@ -39,7 +40,7 @@
                 grid-template-rows: 20px 1fr;
                 padding: 0.4rem;
                 padding-right: 1rem;
-                width: 500px;
+                max-width: 500px;
                 button.btn-close {
                     grid-row: 1;
                     margin: 0;

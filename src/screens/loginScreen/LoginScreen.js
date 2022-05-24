@@ -30,7 +30,7 @@ const LoginScreen = () => {
     if (isAuthenticated) {
       navigate(to.current, { replace: true });
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
   useEffect(() => {
     if (error?.length) {
       setSignInError(error);

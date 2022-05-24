@@ -35,7 +35,8 @@ const Homescreen = () => {
   }, []);
   useEffect(() => {
     let isMounted = true;
-    isMounted && dispatch(getPopularVideos());
+    // isMounted && dispatch(getPopularVideos());
+    isMounted && dispatch(getPopularVideos(undefined, { firstPg: true }));
 
     return () => (isMounted = false);
   }, [dispatch]);
