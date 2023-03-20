@@ -34,7 +34,7 @@ export const getPopularVideos =
         dispatch({
           type: HOME_VIDEOS_REQUEST,
         });
-      const { data } = await request("/getPopularVideos", {
+      const { data } = await request("/getPopularVideos", { 
         ...config,
         params: {
           nextPageToken:

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { GlidingBlink } from "react-loading-indicators";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import CategoriesBar from "../../components/categoriesBar/CategoriesBar";
@@ -83,8 +84,13 @@ const Homescreen = () => {
         next={fetchMoreData}
         loader={
           <div className="w-100">
-            <div className="spinner-style mx-auto">
-              <div className="spinner-border text-danger mx-auto"></div>
+            <div className="spinner-style mx-auto text-center">
+              {/* <div className="spinner-border text-danger mx-auto"></div> */}
+              <GlidingBlink
+                color={["#DC3545"]}
+                size="small"
+                style={{ fontSize: 11 }}
+              />
             </div>
           </div>
         }

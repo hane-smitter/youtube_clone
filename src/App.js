@@ -2,6 +2,7 @@ import React, { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import request from "axios";
+import { GlidingBlink } from "react-loading-indicators";
 
 import Homescreen from "./screens/homescreen/Homescreen";
 import SearchScreen from "./screens/searchscreen/SearchScreen";
@@ -39,7 +40,9 @@ const App = () => {
       {countryCodeLoading ? (
         <div style={{ width: "100vw" }}>
           <div className="d-flex my-2">
-            <div className="spinner-border text-danger mx-auto"></div>
+            {/* #DC3545 */}
+            {/* <div className="spinner-border text-danger mx-auto"></div> */}
+            <GlidingBlink color={["#DC3545"]} size="small" />
           </div>
         </div>
       ) : (

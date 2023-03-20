@@ -6,7 +6,6 @@ const { requestApi } = require("../apiPreflight.js");
 //  videos
 exports.getPopularVideos = (req, res) => {
   if (req.method !== "GET") {
-    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -39,12 +38,10 @@ exports.getPopularVideos = (req, res) => {
   }).then(
     ({ data }) => {
       functions.logger.log("Sending data fetched from API:", data);
-      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).send(data);
     },
     (error) => {
       functions.logger.log("Error frm request API:", error);
-      res.set("Access-Control-Allow-Origin", "*");
       res
         .status((error.response && error.response.status) || 400)
         .send(
@@ -57,7 +54,6 @@ exports.getPopularVideos = (req, res) => {
 
 exports.getVideosByCategory = (req, res) => {
   if (req.method !== "GET") {
-    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -86,12 +82,10 @@ exports.getVideosByCategory = (req, res) => {
   }).then(
     ({ data }) => {
       functions.logger.log("Sending data fetched from API:", data);
-      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).send(data);
     },
     (error) => {
       functions.logger.log("Error frm request videos by cat:", error);
-      res.set("Access-Control-Allow-Origin", "*");
       res
         .status((error.response && error.response.status) || 400)
         .send(
@@ -104,7 +98,6 @@ exports.getVideosByCategory = (req, res) => {
 
 exports.getVideoById = (req, res) => {
   if (req.method !== "GET") {
-    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -119,12 +112,10 @@ exports.getVideoById = (req, res) => {
   }).then(
     ({ data }) => {
       functions.logger.log("Sending data fetched from API:", data);
-      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).send(data);
     },
     (error) => {
       functions.logger.log("Error frm request videos by cat:", error);
-      res.set("Access-Control-Allow-Origin", "*");
       res
         .status((error.response && error.response.status) || 400)
         .send(
@@ -137,7 +128,6 @@ exports.getVideoById = (req, res) => {
 
 exports.getRelatedVideos = (req, res) => {
   if (req.method !== "GET") {
-    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -157,12 +147,10 @@ exports.getRelatedVideos = (req, res) => {
   }).then(
     ({ data }) => {
       functions.logger.log("Sending data fetched from API:", data);
-      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).send(data);
     },
     (error) => {
       functions.logger.log("Error frm request related videos:", error);
-      res.set("Access-Control-Allow-Origin", "*");
       res
         .status((error.response && error.response.status) || 400)
         .send(
@@ -175,7 +163,6 @@ exports.getRelatedVideos = (req, res) => {
 
 exports.getVideosBySearch = (req, res) => {
   if (req.method !== "GET") {
-    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -195,12 +182,10 @@ exports.getVideosBySearch = (req, res) => {
   }).then(
     ({ data }) => {
       functions.logger.log("Sending data fetched from API:", data);
-      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).send(data);
     },
     (error) => {
       functions.logger.log("Error frm video search:", error);
-      res.set("Access-Control-Allow-Origin", "*");
       res
         .status((error.response && error.response.status) || 400)
         .send(
@@ -213,7 +198,6 @@ exports.getVideosBySearch = (req, res) => {
 
 exports.getSubscribedChannels = (req, res) => {
   if (req.method !== "GET") {
-    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -235,7 +219,6 @@ exports.getSubscribedChannels = (req, res) => {
   }).then(
     ({ data }) => {
       functions.logger.log("Sending data fetched from API:", data);
-      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).send(data);
     },
     (error) => {
@@ -243,7 +226,6 @@ exports.getSubscribedChannels = (req, res) => {
         "Error frm subscribed channel req:",
         error.response.data
       );
-      res.set("Access-Control-Allow-Origin", "*");
       res
         .status((error.response && error.response.status) || 400)
         .send(
@@ -256,7 +238,6 @@ exports.getSubscribedChannels = (req, res) => {
 
 exports.getPlaylistByChannelId = (req, res) => {
   if (req.method !== "GET") {
-    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -293,7 +274,6 @@ exports.getPlaylistByChannelId = (req, res) => {
     })
     .then(({ data }) => {
       functions.logger.log("Sending data fetched from API:", data);
-      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).send(data);
     })
     .catch((error) => {
@@ -301,7 +281,6 @@ exports.getPlaylistByChannelId = (req, res) => {
         "Error frm getPlaylistByChannelId:",
         error.response.data.error
       );
-      res.set("Access-Control-Allow-Origin", "*");
       res
         .status((error.response && error.response.status) || 400)
         .send(
@@ -313,7 +292,6 @@ exports.getPlaylistByChannelId = (req, res) => {
 
 exports.getOneVideoDetails = (req, res) => {
   if (req.method !== "GET") {
-    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -330,12 +308,10 @@ exports.getOneVideoDetails = (req, res) => {
   }).then(
     ({ data }) => {
       // functions.logger.log("Sending data fetched from API:", data);
-      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).send(data);
     },
     (error) => {
       functions.logger.log("Error frm request API:", error);
-      res.set("Access-Control-Allow-Origin", "*");
       res
         .status((error.response && error.response.status) || 400)
         .send(
@@ -348,7 +324,6 @@ exports.getOneVideoDetails = (req, res) => {
 
 exports.getMyLikedVideos = (req, res) => {
   if (req.method !== "GET") {
-    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -374,12 +349,10 @@ exports.getMyLikedVideos = (req, res) => {
   }).then(
     ({ data }) => {
       // functions.logger.log("Sending data fetched from API:", data);
-      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).send(data);
     },
     (error) => {
       functions.logger.log("Error frm request API:", error);
-      res.set("Access-Control-Allow-Origin", "*");
       res
         .status((error.response && error.response.status) || 400)
         .send(
@@ -392,7 +365,6 @@ exports.getMyLikedVideos = (req, res) => {
 
 exports.likeVideo = (req, res) => {
   if (req.method !== "POST") {
-    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -436,7 +408,6 @@ exports.likeVideo = (req, res) => {
 
 exports.getOneVideoRating = (req, res) => {
   if (req.method !== "GET") {
-    res.set("Access-Control-Allow-Origin", "*");
     res.sendStatus(405);
     return;
   }
@@ -461,12 +432,10 @@ exports.getOneVideoRating = (req, res) => {
   }).then(
     ({ data }) => {
       // functions.logger.log("Sending data fetched from API:", data);
-      res.set("Access-Control-Allow-Origin", "*");
       res.status(200).send(data);
     },
     (error) => {
       functions.logger.log("Error frm request API:", error?.response);
-      res.set("Access-Control-Allow-Origin", "*");
       res
         .status((error.response && error.response.status) || 400)
         .send(
