@@ -1,34 +1,38 @@
-name: Firebase Application
+name: Firebase App Deployment
 
 on:
   push:
     branches:
       - main
+    # Run on specific files.
+    # paths:
+    # - "src/**"
 
+# Source of this action: https://github.com/marketplace/actions/deploy-to-firebase-hosting
 jobs:
-  deployment:
+  deploy_live_website:
     runs-on: ubuntu-latest
-
     steps:
       - name: Get the source code
         uses: actions/checkout@v2
 
-      - name: install Node
+      - name: Install Node
         uses: actions/setup-node@v2
         with:
-          node-version: "12"
+          node-version: "16"
 
-      - name: install project dependencies
-        run: npm i
+      - name: Clean install dependencies
+        run: npm ci
 
-      - name: Build
+      - name: Build production bundle
         run: npm run build
         env:
           CI: false
 
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
+      - name: Deploy to firebase hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          args: deploy --only hosting
-        env:
-          FIREBASE_TOKEN: ${{secrets.GCP_SA_KEY}}
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          projectId: yt-mimic
+          channelId: live
