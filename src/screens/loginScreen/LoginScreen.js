@@ -60,10 +60,10 @@ const LoginScreen = () => {
         <img src={YTlogo} alt="youtube logo" width={130} />
         <button onClick={handleLogin}>Login with Google</button>
         <p>
-          This project mimics the functionality and user interface of{" "}
+          This project mimics the functionality of{" "}
           <a href="https://youtube.com" target="_blank" rel="noreferrer">
             Youtube
-          </a>
+          </a>. Login to unlock more features such as commenting on videos.
         </p>
       </div>
     </div>

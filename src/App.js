@@ -39,7 +39,7 @@ const App = () => {
     <>
       {countryCodeLoading ? (
         <div style={{ width: "100vw" }}>
-          <div className="d-flex my-2">
+          <div className="d-flex my-2 text-center">
             {/* #DC3545 */}
             {/* <div className="spinner-border text-danger mx-auto"></div> */}
             <GlidingBlink color={["#DC3545"]} size="small" />
